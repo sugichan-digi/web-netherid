@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お知らせ一覧 — ネザーID</title>
+  <meta name="description" content="ネザーIDおよび各ネザーWEBサービスからのお知らせ・更新情報・メンテナンス情報をご確認いただけます。">
+  <script src="/jquery-4.0.0.min.js"></script>
+  <script>
+    (function () {
+      var n = new Date();
+      var v = n.getFullYear() + ("00"+(n.getMonth()+1)).slice(-2) + ("00"+n.getDate()).slice(-2) + ("00"+n.getHours()).slice(-2) + ("00"+n.getMinutes()).slice(-2) + ("00"+n.getSeconds()).slice(-2);
+      document.write('<link rel="stylesheet" href="/design-system/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/notification/style.css?v=' + v + '">');
+      document.write('<script src="/common.js?v=' + v + '"><\/script>');
+      document.write('<script src="/notification/script.js?v=' + v + '"><\/script>');
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header header--primary">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <div class="logo-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h4l8 12h4V20h-4L8 8H4V4z"/>
+          </svg>
+        </div>
+        <span class="logo-text">ネザー<span>ID</span></span>
+      </a>
+      <div class="header-actions">
+        <a href="/auth/login/" class="btn btn-ghost-white btn-sm">ログイン</a>
+        <a href="/auth/register/" class="btn btn-white btn-sm">新規登録（無料）</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main class="notification-main">
+    <div class="notification-inner">
+
+      <!-- Page Title -->
+      <h1 class="notification-page-title">お知らせ一覧</h1>
+
+      <!-- Category Filter Tabs -->
+      <div class="notification-filters" id="notif-filters">
+        <button class="filter-tab active" data-filter="all">全件</button>
+        <button class="filter-tab" data-filter="nether-id">ネザーID</button>
+        <button class="filter-tab" data-filter="nether-ma">ネザーM&amp;A</button>
+        <button class="filter-tab" data-filter="nether-keyword">ネザーキーワード</button>
+        <button class="filter-tab" data-filter="nether-server">ネザーサーバー</button>
+        <button class="filter-tab" data-filter="nether-domain">ネザードメイン</button>
+        <button class="filter-tab" data-filter="nether-dmarket">ネザードメインマーケット</button>
+      </div>
+
+      <!-- Notification List -->
+      <div class="notif-list" id="notif-list">
+        <!-- Rows are rendered by script.js -->
+      </div>
+
+      <!-- Empty State (hidden by default) -->
+      <div class="notif-empty" id="notif-empty" style="display:none;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <p>該当するお知らせがありません</p>
+      </div>
+
+      <!-- Support Section -->
+      <div class="notif-support">
+        <p class="notif-support-text">わからないことは<strong>「マニュアル・よくある質問」</strong>ですぐ解決するかも</p>
+        <a href="#" class="btn btn-outline btn-sm">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          よくある質問を見る
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===== DETAIL MODAL ===== -->
+  <div class="modal-overlay" id="notif-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="notif-modal-title">
+    <div class="modal notif-modal" id="notif-modal">
+      <div class="modal-header notif-modal-header">
+        <div>
+          <div class="modal-header-badges">
+            <span class="badge" id="modal-service-badge"></span>
+            <span class="badge" id="modal-category-badge"></span>
+            <span class="modal-header-date" id="modal-date"></span>
+          </div>
+          <h2 class="modal-title" id="notif-modal-title"></h2>
+        </div>
+        <button class="modal-close" id="notif-modal-close" aria-label="閉じる">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body notif-modal-body" id="notif-modal-body">
+        <!-- Body content injected by JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline btn-sm" id="notif-modal-close-btn">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="lp-footer">
+    <div class="lp-footer-inner">
+      <div class="lp-footer-grid">
+
+        <!-- Col 1: Brand -->
+        <div class="lp-footer-col">
+          <a href="/" class="logo" style="margin-bottom:8px;">
+            <div class="logo-mark">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h4l8 12h4V20h-4L8 8H4V4z"/>
+              </svg>
+            </div>
+            <span class="logo-text">ネザー<span>ID</span></span>
+          </a>
+          <p class="lp-footer-tagline">WEBサイト運営の共通ID</p>
+        </div>
+
+        <!-- Col 2: サポート -->
+        <div class="lp-footer-col">
+          <p class="lp-footer-col-title">サポート</p>
+          <div class="lp-footer-links">
+            <a href="#">よくある質問</a>
+            <a href="#">お問い合わせ</a>
+            <a href="#">マニュアル</a>
+          </div>
+        </div>
+
+        <!-- Col 3: アカウント -->
+        <div class="lp-footer-col">
+          <p class="lp-footer-col-title">アカウント</p>
+          <div class="lp-footer-links">
+            <a href="/auth/register/">新規登録</a>
+            <a href="/auth/login/">ログイン</a>
+            <a href="/auth/password-reset/">パスワード再設定</a>
+          </div>
+        </div>
+
+        <!-- Col 4: 運営会社 -->
+        <div class="lp-footer-col">
+          <p class="lp-footer-col-title">運営会社</p>
+          <div class="lp-footer-links">
+            <a href="#">運営会社情報</a>
+            <a href="#">特定商取引法に基づく表記</a>
+          </div>
+        </div>
+
+        <!-- Col 5: サービス -->
+        <div class="lp-footer-col">
+          <p class="lp-footer-col-title">サービス</p>
+          <div class="lp-footer-links">
+            <a href="#">ネザーM&amp;A</a>
+            <a href="#">ネザーキーワード</a>
+            <a href="#">ネザーサーバー</a>
+            <a href="#">ネザードメイン</a>
+          </div>
+        </div>
+
+      </div>
+      <p class="lp-footer-copy">Copyright &copy; 2026 ネザーID All Rights Reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

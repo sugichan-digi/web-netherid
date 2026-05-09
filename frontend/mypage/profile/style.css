@@ -1,0 +1,44 @@
+/* ===================================================
+   ユーザー情報管理 — style.css
+   =================================================== */
+
+.profile-radio-group {
+  display: flex;
+  gap: var(--space-6);
+  padding: var(--space-2) 0;
+}
+
+.profile-email-change-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border);
+}
+
+.profile-pw-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profile-pw-input-wrap .form-input {
+  padding-right: 44px;
+}
+
+.profile-pw-input-wrap .btn-icon {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-pw-input-wrap .btn-icon:hover {
+  color: var(--text);
+}

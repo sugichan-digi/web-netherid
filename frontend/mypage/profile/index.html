@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ユーザー情報 — ネザーID</title>
+  <meta name="robots" content="noindex,nofollow">
+  <script src="/jquery-4.0.0.min.js"></script>
+  <script>
+    (function () {
+      var n = new Date();
+      var v = n.getFullYear() +
+        ("00" + (n.getMonth() + 1)).slice(-2) +
+        ("00" + n.getDate()).slice(-2) +
+        ("00" + n.getHours()).slice(-2) +
+        ("00" + n.getMinutes()).slice(-2) +
+        ("00" + n.getSeconds()).slice(-2);
+      document.write('<link rel="stylesheet" href="/design-system/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/mypage/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/mypage/profile/style.css?v=' + v + '">');
+      document.write('<script src="/common.js?v=' + v + '"><\/script>');
+      document.write('<script src="/mypage/profile/script.js?v=' + v + '"><\/script>');
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ===== グリーンヘッダー ===== -->
+  <header class="mp-header">
+    <div class="mp-header-inner">
+      <a href="/" class="mp-logo">
+        <div class="mp-logo-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h4l8 12h4V20h-4L8 8H4V4z"/>
+          </svg>
+        </div>
+        <span class="mp-logo-text">ネザーID</span>
+      </a>
+      <div class="mp-header-actions"></div>
+    </div>
+  </header>
+
+  <div class="mp-body">
+
+    <!-- ===== サイドバー ===== -->
+    <aside class="mp-sidebar">
+      <nav>
+        <ul class="mp-nav-list">
+
+          <li><a href="/mypage/" class="mp-nav-item">
+            <svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120zm0-80h560v-560h-80v120H280v-120h-80zm280-560q17 0 28.5-11.5T520-800t-11.5-28.5T480-840t-28.5 11.5T440-800t11.5 28.5T480-760"/>
+            </svg>
+            マイページ
+          </a></li>
+
+          <li><a href="/mypage/profile/" class="mp-nav-item mp-nav-item--active">
+            <svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M480-480q-66 0-113-47t-47-113 47-113 113-47 113 47 47 113-47 113-113 47M160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440t130 15.5T736-378q29 15 46.5 43.5T800-272v112z"/>
+            </svg>
+            ユーザー情報
+          </a></li>
+
+          <!-- <li><span class="mp-nav-item mp-nav-item--disabled">
+            <svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M880-720v480q0 33-23.5 56.5T800-160H160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720m-720 80h640v-80H160zm0 160v240h640v-240z"/>
+            </svg>
+            カード情報
+            <span class="mp-lock-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            </span>
+          </span></li> -->
+
+          <!-- <li><span class="mp-nav-item mp-nav-item--disabled">
+            <svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M240-120v-720h280q100 0 170 70t70 170-70 170-170 70H400v240zm160-400h128q33 0 56.5-23.5T608-600t-23.5-56.5T528-680H400z"/>
+            </svg>
+            ネザーポイント
+            <span class="mp-lock-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            </span>
+          </span></li> -->
+
+          <!-- <li><span class="mp-nav-item mp-nav-item--disabled">
+            <svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M120-640v-120q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v120zm80 520q-33 0-56.5-23.5T120-200v-360h180v440zm460 0v-440h180v360q0 33-23.5 56.5T760-120zm-280 0v-440h200v440z"/>
+            </svg>
+            ご利用明細（請求書）
+            <span class="mp-lock-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            </span>
+          </span></li> -->
+
+          <!-- <li><a href="/mypage/mail-settings/" class="mp-nav-item">
+            <svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160zm320-280L160-640v400h640v-400zm0-80 320-200H160zM160-640v-80 480z"/>
+            </svg>
+            メール受信設定
+          </a></li> -->
+
+          <!-- <li><span class="mp-nav-item mp-nav-item--disabled">
+            <svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor">
+              <path d="m296-80-56-56 276-277 140 140 207-207 57 57-264 263-140-140zm-136-40q-33 0-56.5-23.5T80-200v-560q0-33 23.5-56.5T160-840h560q33 0 56.5 23.5T800-760v168H160zm0-552h560v-88H160z"/>
+            </svg>
+            売上金
+            <span class="mp-lock-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            </span>
+          </span></li> -->
+
+          <!-- <li><span class="mp-nav-item mp-nav-item--disabled">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M21.3 15.1c-.8 0-1.5.4-2 .9l-2.8-1.3c.3-.9.5-1.8.5-2.7 0-1-.2-1.9-.5-2.8l2.8-1.3c.5.6 1.2 1 2.1 1 1.5 0 2.7-1.2 2.7-2.7s-1.2-2.7-2.7-2.7-2.7 1.2-2.7 2.7v.4l-2.8 1.2q-.6-.9-1.5-1.8-1.2-1.2-2.7-1.8c-1-.4-2.1-.7-3.3-.7s-2.3.2-3.3.7Q3.6 4.8 2.4 6c-.7.8-1.3 1.7-1.7 2.7S0 10.8 0 12s.2 2.3.7 3.3q.6 1.5 1.8 2.7t2.7 1.8c1 .4 2.1.7 3.3.7s2.3-.2 3.3-.7q1.5-.6 2.7-1.8c.6-.6 1.1-1.2 1.5-2l2.8 1.3c0 .2-.1.3-.1.5 0 1.5 1.2 2.7 2.7 2.7s2.7-1.2 2.7-2.7c-.1-1.5-1.3-2.7-2.8-2.7m-15-7.3q.9-.9 2.1-.9t2.1.9.9 2.1-.9 2.1-2.1.9-2.1-.9-.9-2.1c0-.8.4-1.6.9-2.1m2.1 10.9c-2.1 0-4-.9-5.2-2.4.7-.5 1.5-1 2.4-1.3s1.8-.5 2.8-.5 1.9.2 2.8.5 1.7.7 2.4 1.3c-1.2 1.5-3.1 2.4-5.2 2.4"/>
+            </svg>
+            アフィリエイト
+            <span class="mp-lock-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            </span>
+          </span></li> -->
+
+          <li><a href="/contact/" class="mp-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M10.597 16q0-2.024.362-2.912.363-.888 1.538-1.938 1.025-.9 1.562-1.562.538-.663.538-1.513 0-1.025-.688-1.7T11.997 5.7q-1.275 0-1.938.775-.662.776-.937 1.575l-2.575-1.1q.525-1.6 1.925-2.775T11.997 3q2.625 0 4.037 1.463 1.413 1.461 1.413 3.512 0 1.25-.538 2.138-.537.887-1.687 2.012-1.226 1.175-1.488 1.787-.262.614-.262 2.088zm1.4 6q-.825 0-1.413-.587A1.93 1.93 0 0 1 9.997 20q0-.824.587-1.413A1.93 1.93 0 0 1 11.997 18q.825 0 1.412.587.588.588.588 1.413 0 .824-.588 1.413a1.93 1.93 0 0 1-1.412.587"/>
+            </svg>
+            お問い合わせ
+          </a></li>
+
+          <li><a href="/mypage/account/" class="mp-nav-item mp-nav-item--danger">
+            <svg width="20" height="20" viewBox="0 0 21 21" fill="currentColor">
+              <path d="m18.775 20.122-2.625-2.625H3v-2.8q0-.85.438-1.563.437-.712 1.162-1.087a13.7 13.7 0 0 1 2.288-.925 16.4 16.4 0 0 1 2.362-.525L.375 1.722 1.8.297l18.4 18.4zM17.4 12.047q.725.35 1.15 1.062t.45 1.538l-3.35-3.35q.45.175.888.35.437.175.862.4m-4.2-3.2-5.55-5.55A4.1 4.1 0 0 1 9.1 1.972a3.9 3.9 0 0 1 1.9-.475q1.65 0 2.825 1.175T15 5.497q0 1.025-.475 1.9a4.1 4.1 0 0 1-1.325 1.45"/>
+            </svg>
+            ネザーID退会
+          </a></li>
+
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- ===== メインコンテンツ ===== -->
+    <main class="mp-main">
+
+      <h2 class="mp-page-title">ユーザー情報変更</h2>
+
+      <!-- タブバー -->
+      <div class="mp-tab-bar" role="tablist">
+        <button class="mp-tab mp-tab--active" data-tab="basic" role="tab" aria-selected="true">基本情報</button>
+        <button class="mp-tab" data-tab="email" role="tab" aria-selected="false">メールアドレス</button>
+        <button class="mp-tab" data-tab="password" role="tab" aria-selected="false">パスワード</button>
+      </div>
+
+      <!-- ===== タブ：基本情報 ===== -->
+      <div class="mp-tab-panel mp-tab-panel--active" data-panel="basic">
+
+        <div class="mp-info-bubble">
+          ネザーIDに登録している基本情報を変更できます。<br>
+          氏名・住所などの情報は各サービスのご利用に使われます。
+        </div>
+
+        <!-- 基本情報カード -->
+        <div class="card" style="margin-bottom:var(--space-5);">
+          <div class="card-header">
+            <h3 class="heading-md heading--panel">基本情報</h3>
+          </div>
+          <form id="js-profile-form" novalidate>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label" for="name">
+                  お名前（ハンドルネーム可）
+                  <span class="required">*</span>
+                </label>
+                <input type="text" id="name" name="name" class="form-input" placeholder="山田太郎" autocomplete="name">
+              </div>
+
+              <!--
+              <div class="form-group">
+                <label class="form-label">属性</label>
+                <div class="profile-radio-group">
+                  <label class="form-check">
+                    <input type="radio" name="account_type" value="personal" checked>
+                    <span class="form-check-label">個人</span>
+                  </label>
+                  <label class="form-check">
+                    <input type="radio" name="account_type" value="corporate">
+                    <span class="form-check-label">法人</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="phone">電話番号</label>
+                <input type="tel" id="phone" name="phone" class="form-input" placeholder="09012345678" autocomplete="tel" style="max-width:240px;">
+                <span class="form-hint">ハイフンなしで入力してください</span>
+              </div>
+              -->
+
+              <div id="js-profile-form-error" class="alert alert-danger" style="display:none;"></div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary" id="js-profile-save-btn">変更を保存する</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- 住所カード -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="heading-md heading--panel">住所</h3>
+          </div>
+          <form id="js-address-form" novalidate>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label" for="postal-code">郵便番号</label>
+                <div style="display:flex;gap:var(--space-3);align-items:flex-start;">
+                  <input type="text" id="postal-code" name="postal_code" class="form-input" placeholder="1000001" maxlength="7" style="max-width:140px;">
+                  <button type="button" class="btn btn-outline" id="js-autofill-address" style="white-space:nowrap;flex-shrink:0;">
+                    住所を自動入力
+                  </button>
+                </div>
+                <span class="form-hint">ハイフンなしで7桁入力してください</span>
+                <span class="form-error" id="js-postal-error" style="display:none;"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="prefecture">都道府県</label>
+                <select id="prefecture" name="prefecture" class="form-input form-select" style="max-width:200px;">
+                  <option value="">選択してください</option>
+                  <option value="北海道">北海道</option>
+                  <option value="青森県">青森県</option>
+                  <option value="岩手県">岩手県</option>
+                  <option value="宮城県">宮城県</option>
+                  <option value="秋田県">秋田県</option>
+                  <option value="山形県">山形県</option>
+                  <option value="福島県">福島県</option>
+                  <option value="茨城県">茨城県</option>
+                  <option value="栃木県">栃木県</option>
+                  <option value="群馬県">群馬県</option>
+                  <option value="埼玉県">埼玉県</option>
+                  <option value="千葉県">千葉県</option>
+                  <option value="東京都">東京都</option>
+                  <option value="神奈川県">神奈川県</option>
+                  <option value="新潟県">新潟県</option>
+                  <option value="富山県">富山県</option>
+                  <option value="石川県">石川県</option>
+                  <option value="福井県">福井県</option>
+                  <option value="山梨県">山梨県</option>
+                  <option value="長野県">長野県</option>
+                  <option value="岐阜県">岐阜県</option>
+                  <option value="静岡県">静岡県</option>
+                  <option value="愛知県">愛知県</option>
+                  <option value="三重県">三重県</option>
+                  <option value="滋賀県">滋賀県</option>
+                  <option value="京都府">京都府</option>
+                  <option value="大阪府">大阪府</option>
+                  <option value="兵庫県">兵庫県</option>
+                  <option value="奈良県">奈良県</option>
+                  <option value="和歌山県">和歌山県</option>
+                  <option value="鳥取県">鳥取県</option>
+                  <option value="島根県">島根県</option>
+                  <option value="岡山県">岡山県</option>
+                  <option value="広島県">広島県</option>
+                  <option value="山口県">山口県</option>
+                  <option value="徳島県">徳島県</option>
+                  <option value="香川県">香川県</option>
+                  <option value="愛媛県">愛媛県</option>
+                  <option value="高知県">高知県</option>
+                  <option value="福岡県">福岡県</option>
+                  <option value="佐賀県">佐賀県</option>
+                  <option value="長崎県">長崎県</option>
+                  <option value="熊本県">熊本県</option>
+                  <option value="大分県">大分県</option>
+                  <option value="宮崎県">宮崎県</option>
+                  <option value="鹿児島県">鹿児島県</option>
+                  <option value="沖縄県">沖縄県</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="city">市区町村</label>
+                <input type="text" id="city" name="city" class="form-input" placeholder="千代田区" autocomplete="address-level2">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="street">番地</label>
+                <input type="text" id="street" name="street" class="form-input" placeholder="千代田1-1" autocomplete="address-line1">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="building">
+                  建物名・部屋番号
+                  <span class="optional">任意</span>
+                </label>
+                <input type="text" id="building" name="building" class="form-input" placeholder="ネザービル 101号室" autocomplete="address-line2">
+              </div>
+
+              <div id="js-address-form-error" class="alert alert-danger" style="display:none;"></div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary" id="js-address-save-btn">変更を保存する</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- ===== タブ：メールアドレス ===== -->
+      <div class="mp-tab-panel" data-panel="email">
+
+        <div class="mp-info-bubble">
+          メールアドレスを変更すると、新しいアドレスに確認メールが送信されます。<br>
+          メール内のリンクをクリックすることで変更が完了します。
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="heading-md heading--panel">メールアドレス変更</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label" for="current-email">現在のメールアドレス</label>
+              <input type="email" id="current-email" class="form-input" disabled placeholder="読み込み中...">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="new-email">
+                新しいメールアドレス
+                <span class="required">*</span>
+              </label>
+              <input type="email" id="new-email" name="new-email" class="form-input" placeholder="new@example.com" autocomplete="email">
+              <span class="form-error" id="js-email-change-error" style="display:none;"></span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button type="button" class="btn btn-primary" id="js-change-email-btn">変更する</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===== タブ：パスワード ===== -->
+      <div class="mp-tab-panel" data-panel="password">
+
+        <div class="mp-info-bubble">
+          パスワードを変更します。現在のパスワードを確認のうえ、新しいパスワードを入力してください。<br>
+          パスワードは8文字以上で設定してください。
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="heading-md heading--panel">パスワード変更</h3>
+          </div>
+          <form id="js-password-form" novalidate>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label" for="current-password">
+                  現在のパスワード
+                  <span class="required">*</span>
+                </label>
+                <div class="profile-pw-input-wrap">
+                  <input type="password" id="current-password" class="form-input" autocomplete="current-password">
+                  <button type="button" class="js-toggle-pw btn-icon" data-target="current-password" aria-label="パスワードを表示">
+                    <svg class="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg class="eye-off-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                  </button>
+                </div>
+                <span class="form-error" id="js-current-pw-error" style="display:none;"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="new-password">
+                  新しいパスワード
+                  <span class="required">*</span>
+                </label>
+                <div class="profile-pw-input-wrap">
+                  <input type="password" id="new-password" class="form-input" autocomplete="new-password">
+                  <button type="button" class="js-toggle-pw btn-icon" data-target="new-password" aria-label="パスワードを表示">
+                    <svg class="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg class="eye-off-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                  </button>
+                </div>
+                <div class="pw-strength-wrap">
+                  <div class="pw-strength-bar" id="js-pw-strength-bar"></div>
+                </div>
+                <div class="pw-strength-label" id="js-pw-strength-label"></div>
+                <span class="form-error" id="js-new-pw-error" style="display:none;"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="confirm-password">
+                  新しいパスワード（確認）
+                  <span class="required">*</span>
+                </label>
+                <div class="profile-pw-input-wrap">
+                  <input type="password" id="confirm-password" class="form-input" autocomplete="new-password">
+                  <button type="button" class="js-toggle-pw btn-icon" data-target="confirm-password" aria-label="パスワードを表示">
+                    <svg class="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg class="eye-off-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                  </button>
+                </div>
+                <span class="form-error" id="js-confirm-pw-error" style="display:none;"></span>
+              </div>
+
+              <div id="js-password-form-error" class="alert alert-danger" style="display:none;"></div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary" id="js-change-pw-btn">パスワードを変更する</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+</body>
+</html>

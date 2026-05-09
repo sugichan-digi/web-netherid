@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ネザーID デザインシステム — UIコンポーネント・スタイルガイド">
+  <meta name="robots" content="noindex,nofollow">
+  <title>デザインシステム — ネザーID</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ===== DS Catalog Specific ===== */
+    body { background: var(--bg); }
+
+    .ds-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: var(--space-10) var(--space-6);
+    }
+
+    .ds-header {
+      margin-bottom: var(--space-12);
+      padding-bottom: var(--space-6);
+      border-bottom: 2px solid var(--border);
+    }
+
+    .ds-header-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.03em;
+      margin-bottom: var(--space-2);
+    }
+
+    .ds-header-title span { color: var(--primary); }
+
+    .ds-section { margin-bottom: var(--space-16); }
+
+    .ds-section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: var(--space-5);
+      padding-bottom: var(--space-3);
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .ds-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: var(--radius-full);
+      background: var(--primary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .ds-sub { font-size: 13px; font-weight: 700; color: var(--text-sub); margin: var(--space-5) 0 var(--space-3); }
+
+    .ds-showcase {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      align-items: center;
+    }
+
+    .ds-showcase--col { flex-direction: column; align-items: flex-start; }
+    .ds-showcase--bg  { background: var(--bg); }
+    .ds-showcase--pad-none { padding: 0; overflow: hidden; }
+
+    /* Color Grid */
+    .ds-color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: var(--space-3);
+      margin-bottom: var(--space-5);
+    }
+
+    .ds-color-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .ds-swatch { height: 64px; width: 100%; }
+
+    .ds-color-info { padding: var(--space-3); font-size: 11px; }
+    .ds-color-name { font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .ds-color-var  { color: var(--text-muted); font-family: monospace; font-size: 10px; }
+    .ds-color-hex  { color: var(--text-light); font-family: monospace; font-size: 10px; margin-top: 1px; }
+
+    /* Token Table */
+    .ds-token-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .ds-token-table th {
+      text-align: left;
+      padding: var(--space-2) var(--space-4);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .ds-token-table td {
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .ds-token-table tr:last-child td { border-bottom: none; }
+    .ds-token-table code {
+      font-family: monospace;
+      font-size: 11px;
+      background: var(--bg);
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: var(--primary);
+    }
+
+    /* Spacing Demo */
+    .ds-spacing-demo { display: flex; gap: var(--space-4); align-items: flex-end; flex-wrap: wrap; }
+    .ds-space-block  { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
+    .ds-space-bar    { background: var(--primary-light); border: 1px solid var(--primary); border-radius: 2px; height: 36px; }
+    .ds-space-label  { font-size: 10px; color: var(--text-muted); text-align: center; font-family: monospace; }
+
+    /* Radius Demo */
+    .ds-radius-demo { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+    .ds-radius-box {
+      width: 72px;
+      height: 56px;
+      background: var(--primary-light);
+      border: 2px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: var(--primary);
+      font-weight: 700;
+      gap: 2px;
+    }
+
+    /* Shadow Demo */
+    .ds-shadow-demo { display: flex; gap: var(--space-8); flex-wrap: wrap; }
+    .ds-shadow-box {
+      width: 90px;
+      height: 70px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-family: monospace;
+    }
+
+    /* Sidebar mock */
+    .ds-sidebar-mock {
+      width: 240px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* Card mock width */
+    .ds-card-demo { max-width: 480px; width: 100%; }
+
+    /* Heading catalog label */
+    .ds-type-label {
+      font-size: 11px;
+      font-family: monospace;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- SVG Symbol Definitions (reusable icons) -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;" aria-hidden="true">
+  <symbol id="icon-check-circle" viewBox="0 0 24 24">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+  </symbol>
+  <symbol id="icon-warning" viewBox="0 0 24 24">
+    <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+  </symbol>
+  <symbol id="icon-x-circle" viewBox="0 0 24 24">
+    <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/>
+  </symbol>
+  <symbol id="icon-info" viewBox="0 0 24 24">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+  </symbol>
+  <symbol id="icon-lock" viewBox="0 0 24 24">
+    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+  </symbol>
+  <symbol id="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </symbol>
+  <symbol id="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+    <line x1="1" y1="1" x2="23" y2="23"/>
+  </symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24">
+    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+  </symbol>
+  <symbol id="icon-bell" viewBox="0 0 24 24">
+    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+  </symbol>
+  <symbol id="icon-store" viewBox="0 0 24 24">
+    <path d="M20 4H4v2l16 .01V4zM4 22h16v-7.99l2 .01V8l-3-4H5L2 8v6l2-.01V22zm2-2v-5.99h12V20H6zm1-8h10v2H7v-2z"/>
+  </symbol>
+  <symbol id="icon-chart" viewBox="0 0 24 24">
+    <path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/>
+  </symbol>
+  <symbol id="icon-chat" viewBox="0 0 24 24">
+    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+  </symbol>
+  <symbol id="icon-monitor" viewBox="0 0 24 24">
+    <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/>
+  </symbol>
+  <symbol id="icon-phone" viewBox="0 0 24 24">
+    <path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/>
+  </symbol>
+</svg>
+
+<div class="ds-wrap">
+
+  <!-- Header -->
+  <div class="ds-header">
+    <div class="ds-header-title"><span>ネザーID</span> デザインシステム</div>
+    <p class="text-muted" style="font-size:14px; margin-top:4px;">UIコンポーネント・デザイントークン・スタイルガイドライン</p>
+    <p style="font-size:12px; color:var(--text-light); margin-top:6px;">技術スタック: HTML / Vanilla CSS / jQuery 4.0.0 &nbsp;|&nbsp; ブランド: Emerald Green + Grayscale</p>
+  </div>
+
+  <!-- ===== 1. カラーパレット ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">1</span>カラーパレット</h2>
+
+    <div class="ds-sub">Primary（ブランド・メインアクション）</div>
+    <div class="ds-color-grid">
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#059669"></div>
+        <div class="ds-color-info">
+          <div class="ds-color-name">Primary</div>
+          <div class="ds-color-var">--primary</div>
+          <div class="ds-color-hex">#059669</div>
+        </div>
+      </div>
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#047857"></div>
+        <div class="ds-color-info">
+          <div class="ds-color-name">Primary Hover</div>
+          <div class="ds-color-var">--primary-hover</div>
+          <div class="ds-color-hex">#047857</div>
+        </div>
+      </div>
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#ECFDF5; border-bottom:1px solid #E5E7EB;"></div>
+        <div class="ds-color-info">
+          <div class="ds-color-name">Primary Light</div>
+          <div class="ds-color-var">--primary-light</div>
+          <div class="ds-color-hex">#ECFDF5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-sub">Grayscale（画面骨格・テキスト）</div>
+    <div class="ds-color-grid">
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#111827"></div>
+        <div class="ds-color-info">
+          <div class="ds-color-name">Text</div>
+          <div class="ds-color-var">--text</div>
+          <div class="ds-color-hex">#111827</div>
+        </div>
+      </div>
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#374151"></div>
+        <div class="ds-color-info">
+          <div class="ds-color-name">Text Sub</div>
+          <div class="ds-color-var">--text-sub</div>
+          <div class="ds-color-hex">#374151</div>
+        </div>
+      </div>
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#6B7280"></div>
+        <div class="ds-color-info">
+          <div class="ds-color-name">Text Muted</div>
+          <div class="ds-color-var">--text-muted</div>
+          <div class="ds-color-hex">#6B7280</div>
+        </div>
+      </div>
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#F9FAFB; border-bottom:1px solid #E5E7EB;"></div>
+        <div class="ds-color-info">
+          <div class="ds-color-name">Background</div>
+          <div class="ds-color-var">--bg</div>
+          <div class="ds-color-hex">#F9FAFB</div>
+        </div>
+      </div>
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#FFFFFF; border-bottom:1px solid #E5E7EB;"></div>
+        <div class="ds-color-info">
+          <div class="ds-color-name">Surface</div>
+          <div class="ds-color-var">--surface</div>
+          <div class="ds-color-hex">#FFFFFF</div>
+        </div>
+      </div>
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#E5E7EB"></div>
+        <div class="ds-color-info">
+          <div class="ds-color-name">Border</div>
+          <div class="ds-color-var">--border</div>
+          <div class="ds-color-hex">#E5E7EB</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-sub">Semantic Colors</div>
+    <div class="ds-color-grid">
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#16A34A"></div>
+        <div class="ds-color-info"><div class="ds-color-name">Success</div><div class="ds-color-hex">#16A34A</div></div>
+      </div>
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#D97706"></div>
+        <div class="ds-color-info"><div class="ds-color-name">Warning</div><div class="ds-color-hex">#D97706</div></div>
+      </div>
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#DC2626"></div>
+        <div class="ds-color-info"><div class="ds-color-name">Danger</div><div class="ds-color-hex">#DC2626</div></div>
+      </div>
+      <div class="ds-color-card">
+        <div class="ds-swatch" style="background:#0284C7"></div>
+        <div class="ds-color-info"><div class="ds-color-name">Info</div><div class="ds-color-hex">#0284C7</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 2. タイポグラフィ ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">2</span>タイポグラフィ</h2>
+
+    <div class="ds-showcase ds-showcase--pad-none">
+      <table class="ds-token-table">
+        <thead><tr><th>サイズ</th><th>用途</th><th>プレビュー</th></tr></thead>
+        <tbody>
+          <tr><td><code>11px</code></td><td class="text-muted">バッジ / タイムスタンプ / 補足</td><td style="font-size:11px;color:var(--text-muted);">2026年5月9日 ログイン</td></tr>
+          <tr><td><code>12px</code></td><td class="text-muted">フォームヒント / エラー / フッター</td><td style="font-size:12px;color:var(--text-muted);">パスワードは8文字以上で設定してください</td></tr>
+          <tr><td><code>13px</code></td><td class="text-muted">ラベル / サイドバー / キャプション</td><td style="font-size:13px;font-weight:600;">メールアドレス</td></tr>
+          <tr><td><code>14px</code></td><td class="text-muted">本文補助 / 通知 / カード説明</td><td style="font-size:14px;">アカウントに関する重要なお知らせです</td></tr>
+          <tr><td><code>15px</code></td><td class="text-muted">本文基準（ベース）</td><td style="font-size:15px;">ひとつのIDで全サービスへ</td></tr>
+          <tr><td><code>16px</code></td><td class="text-muted">カードタイトル / 強調テキスト</td><td style="font-size:16px;font-weight:700;">パスワードを変更する</td></tr>
+          <tr><td><code>18px</code></td><td class="text-muted">ロゴテキスト</td><td style="font-size:18px;font-weight:800;letter-spacing:-0.03em;">netherid</td></tr>
+          <tr><td><code>20px</code></td><td class="text-muted">ページタイトル</td><td style="font-size:20px;font-weight:700;">ダッシュボード</td></tr>
+          <tr><td><code>22px</code></td><td class="text-muted">認証カードタイトル</td><td style="font-size:22px;font-weight:700;">ログイン</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ds-sub">Font Weight</div>
+    <div class="ds-showcase ds-showcase--pad-none">
+      <table class="ds-token-table">
+        <thead><tr><th>ウェイト</th><th>用途</th><th>プレビュー</th></tr></thead>
+        <tbody>
+          <tr><td><code>400</code> Regular</td><td class="text-muted">本文 / 説明文</td><td style="font-weight:400;">個人情報の管理はnetheridで</td></tr>
+          <tr><td><code>500</code> Medium</td><td class="text-muted">ナビ / サイドバー項目</td><td style="font-weight:500;">セキュリティ設定</td></tr>
+          <tr><td><code>600</code> Semibold</td><td class="text-muted">フォームラベル / バッジ</td><td style="font-weight:600;">メールアドレス <span class="badge badge-success">確認済み</span></td></tr>
+          <tr><td><code>700</code> Bold</td><td class="text-muted">カードタイトル / ページ見出し</td><td style="font-weight:700;">基本情報設定</td></tr>
+          <tr><td><code>800</code> Extrabold</td><td class="text-muted">ロゴテキスト</td><td style="font-size:18px;font-weight:800;letter-spacing:-0.03em;">netherid</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== 3. 見出し ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">3</span>見出し（Headings）</h2>
+
+    <!-- サイズスケール -->
+    <div class="ds-sub">サイズスケール</div>
+    <div class="ds-card-demo" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-6);">
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+        <div style="display:flex;align-items:baseline;gap:var(--space-5);">
+          <code style="font-size:11px;color:var(--text-muted);width:120px;flex-shrink:0;">.heading-xl</code>
+          <p class="heading-xl">ダッシュボード</p>
+          <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">24px · Bold · ページタイトル</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:var(--space-5);">
+          <code style="font-size:11px;color:var(--text-muted);width:120px;flex-shrink:0;">.heading-lg</code>
+          <p class="heading-lg">セキュリティ設定</p>
+          <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">20px · Bold · セクション見出し</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:var(--space-5);">
+          <code style="font-size:11px;color:var(--text-muted);width:120px;flex-shrink:0;">.heading-md</code>
+          <p class="heading-md">パスワード変更</p>
+          <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">17px · Bold · カード見出し</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:var(--space-5);">
+          <code style="font-size:11px;color:var(--text-muted);width:120px;flex-shrink:0;">.heading-sm</code>
+          <p class="heading-sm">ログイン履歴</p>
+          <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">14px · Bold · 小見出し</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:var(--space-5);">
+          <code style="font-size:11px;color:var(--text-muted);width:120px;flex-shrink:0;">.heading-xs</code>
+          <p class="heading-xs">Security</p>
+          <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">11px · Bold · ラベル見出し（大文字）</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- LP 用見出し -->
+    <div class="ds-sub">LP 用見出し &mdash; <code>.heading--lp</code></div>
+    <div class="ds-type-label">中央揃え・下部にグリーンのアクセントライン。ランディングページのセクションタイトルに使用。</div>
+    <div class="ds-card-demo" style="background:var(--primary-light);border-radius:var(--radius-lg);padding:var(--space-10) var(--space-6);">
+      <div style="display:flex;flex-direction:column;gap:var(--space-10);">
+
+        <!-- eyebrow + xl -->
+        <div>
+          <span class="heading-eyebrow">Features</span>
+          <h2 class="heading-xl heading--lp">netheridが選ばれる理由</h2>
+          <p style="text-align:center;font-size:14px;color:var(--text-muted);margin-top:var(--space-4);max-width:400px;margin-left:auto;margin-right:auto;">ひとつのIDで、すべてのサービスへ。安全で快適なログイン体験を提供します。</p>
+        </div>
+
+        <!-- eyebrow + lg -->
+        <div>
+          <span class="heading-eyebrow">How it works</span>
+          <h3 class="heading-lg heading--lp">3ステップで始める</h3>
+        </div>
+
+        <!-- eyebrow なし md -->
+        <div>
+          <h3 class="heading-md heading--lp">よくあるご質問</h3>
+        </div>
+
+      </div>
+    </div>
+    <div class="ds-type-label" style="margin-top:var(--space-3);">使用例: <code>&lt;span class="heading-eyebrow"&gt;Features&lt;/span&gt;&lt;h2 class="heading-xl heading--lp"&gt;...&lt;/h2&gt;</code></div>
+
+    <!-- マイページ ページタイトル -->
+    <div class="ds-sub">マイページ ページタイトル &mdash; <code>.heading--page</code></div>
+    <div class="ds-type-label">左に太めのグリーンボーダー。マイページ各画面の最上部タイトルに使用。</div>
+    <div class="ds-card-demo" style="background:var(--bg);border-radius:var(--radius-lg);padding:var(--space-6);">
+      <div style="display:flex;flex-direction:column;gap:var(--space-6);">
+
+        <div>
+          <h1 class="heading-xl heading--page">ダッシュボード</h1>
+          <p style="font-size:13px;color:var(--text-muted);margin-top:var(--space-2);padding-left:var(--space-5);">アカウント情報の概要と各種サービスへのアクセス</p>
+        </div>
+
+        <div>
+          <h2 class="heading-lg heading--page">セキュリティ設定</h2>
+          <p style="font-size:13px;color:var(--text-muted);margin-top:var(--space-2);padding-left:var(--space-5);">パスワードと2段階認証を管理します</p>
+        </div>
+
+        <div>
+          <h2 class="heading-md heading--page">ユーザー情報の変更</h2>
+        </div>
+
+      </div>
+    </div>
+    <div class="ds-type-label" style="margin-top:var(--space-3);">使用例: <code>&lt;h1 class="heading-xl heading--page"&gt;ダッシュボード&lt;/h1&gt;</code></div>
+
+    <!-- カード内パネル見出し -->
+    <div class="ds-sub">カード内パネル見出し &mdash; <code>.heading--panel</code></div>
+    <div class="ds-type-label">下部に短いグリーンのアンダーライン。カードやパネル内のセクション区切りに使用。</div>
+    <div class="ds-card-demo">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+
+        <div class="card">
+          <div class="card-body">
+            <h3 class="heading-md heading--panel">基本情報</h3>
+            <div style="margin-top:var(--space-4);display:flex;flex-direction:column;gap:var(--space-3);">
+              <div style="display:flex;justify-content:space-between;font-size:13px;">
+                <span style="color:var(--text-muted);">ユーザー名</span>
+                <span style="color:var(--text);">taro_yamada</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;">
+                <span style="color:var(--text-muted);">メールアドレス</span>
+                <span style="color:var(--text);">taro@example.com</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h3 class="heading-md heading--panel">セキュリティ</h3>
+            <div style="margin-top:var(--space-4);display:flex;flex-direction:column;gap:var(--space-3);">
+              <div style="display:flex;justify-content:space-between;font-size:13px;">
+                <span style="color:var(--text-muted);">パスワード</span>
+                <span style="color:var(--text);">最終変更 30日前</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;">
+                <span style="color:var(--text-muted);">2段階認証</span>
+                <span class="badge badge-success">有効</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column:1/-1;">
+          <div class="card-body">
+            <h3 class="heading-sm heading--panel">ログイン履歴</h3>
+            <div style="margin-top:var(--space-4);display:flex;flex-direction:column;gap:var(--space-2);">
+              <div style="display:flex;justify-content:space-between;font-size:12px;padding:var(--space-2) 0;border-bottom:1px solid var(--border);">
+                <span style="color:var(--text-muted);">2026-05-09 14:32</span>
+                <span style="color:var(--text);">Chrome / macOS</span>
+                <span class="badge badge-success">成功</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;padding:var(--space-2) 0;">
+                <span style="color:var(--text-muted);">2026-05-08 09:17</span>
+                <span style="color:var(--text);">Safari / iOS</span>
+                <span class="badge badge-success">成功</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="ds-type-label" style="margin-top:var(--space-3);">使用例: <code>&lt;h3 class="heading-md heading--panel"&gt;基本情報&lt;/h3&gt;</code></div>
+
+    <!-- 組み合わせ早見表 -->
+    <div class="ds-sub">サイズ × スタイル 組み合わせ早見表</div>
+    <div class="ds-card-demo" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>サイズクラス</th>
+            <th><code>.heading--lp</code><br><span style="font-weight:400;font-size:11px;">LP セクション</span></th>
+            <th><code>.heading--page</code><br><span style="font-weight:400;font-size:11px;">マイページタイトル</span></th>
+            <th><code>.heading--panel</code><br><span style="font-weight:400;font-size:11px;">カード内見出し</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>.heading-xl</code></td>
+            <td><p class="heading-xl heading--lp" style="font-size:18px;">netheridとは</p></td>
+            <td><p class="heading-xl heading--page" style="font-size:18px;">ダッシュボード</p></td>
+            <td><p class="heading-xl heading--panel" style="font-size:18px;">基本情報</p></td>
+          </tr>
+          <tr>
+            <td><code>.heading-lg</code></td>
+            <td><p class="heading-lg heading--lp" style="font-size:16px;">機能一覧</p></td>
+            <td><p class="heading-lg heading--page" style="font-size:16px;">セキュリティ設定</p></td>
+            <td><p class="heading-lg heading--panel" style="font-size:16px;">連携サービス</p></td>
+          </tr>
+          <tr>
+            <td><code>.heading-md</code></td>
+            <td><p class="heading-md heading--lp">よくある質問</p></td>
+            <td><p class="heading-md heading--page">情報を変更</p></td>
+            <td><p class="heading-md heading--panel">パスワード変更</p></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- ===== 4. ボタン ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">4</span>ボタン</h2>
+
+    <div class="ds-sub">バリアント</div>
+    <div class="ds-showcase">
+      <button class="btn btn-primary">変更を保存</button>
+      <button class="btn btn-outline">キャンセル</button>
+      <button class="btn btn-ghost">スキップ</button>
+      <button class="btn btn-danger">退会する</button>
+      <button class="btn btn-danger-outline">削除</button>
+      <button class="btn btn-primary" disabled>保存中...</button>
+    </div>
+
+    <div class="ds-sub">グリーンヘッダー上のボタン（<code>.header--primary</code> 内で使用）</div>
+    <div class="ds-showcase" style="background:var(--primary);border-radius:var(--radius-lg);gap:var(--space-3);">
+      <button class="btn btn-ghost-white btn-sm">ログイン</button>
+      <button class="btn btn-white btn-sm">新規登録（無料）</button>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:var(--space-2);">
+      <code>.btn-ghost-white</code>: 透明・白テキスト。グリーンヘッダー上の副アクション（ログイン等）に使用。<br>
+      <code>.btn-white</code>: 白背景・グリーンテキスト。グリーンヘッダー上の主アクション（新規登録等）に使用。
+    </p>
+
+    <div class="ds-sub">サイズ</div>
+    <div class="ds-showcase">
+      <button class="btn btn-primary btn-sm">小ボタン</button>
+      <button class="btn btn-primary">通常ボタン</button>
+      <button class="btn btn-primary btn-lg">大きなCTA</button>
+      <button class="btn btn-primary btn-full" style="max-width:280px;">全幅ボタン</button>
+    </div>
+  </section>
+
+  <!-- ===== 4. フォーム要素 ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">5</span>フォーム要素</h2>
+
+    <div class="ds-showcase ds-showcase--col" style="max-width:480px;">
+
+      <!-- テキスト入力 -->
+      <div class="form-group" style="width:100%;">
+        <label class="form-label">メールアドレス <span class="required">*</span></label>
+        <input type="email" class="form-input" placeholder="example@email.com">
+      </div>
+
+      <!-- エラー状態 -->
+      <div class="form-group" style="width:100%;">
+        <label class="form-label">メールアドレス <span class="required">*</span></label>
+        <input type="email" class="form-input form-input--error" value="invalid-email" placeholder="example@email.com">
+        <span class="form-error">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+          正しいメールアドレス形式で入力してください
+        </span>
+      </div>
+
+      <!-- パスワード（表示切替付き） -->
+      <div class="form-group" style="width:100%;">
+        <label class="form-label">パスワード <span class="required">*</span></label>
+        <div class="input-wrap">
+          <input type="password" class="form-input" id="pw-demo" placeholder="8文字以上で入力" style="padding-right: 48px;">
+          <span class="input-suffix">
+            <button class="input-toggle-pw" id="toggle-pw-btn" title="パスワードを表示">
+              <svg id="pw-icon-show" width="16" height="16" aria-hidden="true"><use href="#icon-eye"/></svg>
+              <svg id="pw-icon-hide" width="16" height="16" aria-hidden="true" style="display:none;"><use href="#icon-eye-off"/></svg>
+            </button>
+          </span>
+        </div>
+        <span class="form-hint">大文字・小文字・数字を含む8文字以上</span>
+      </div>
+
+      <!-- セレクト -->
+      <div class="form-group" style="width:100%;">
+        <label class="form-label">属性 <span class="optional">任意</span></label>
+        <select class="form-input form-select">
+          <option value="">選択してください</option>
+          <option>個人</option>
+          <option>法人</option>
+        </select>
+      </div>
+
+      <!-- テキストエリア -->
+      <div class="form-group" style="width:100%;">
+        <label class="form-label">お問い合わせ内容</label>
+        <textarea class="form-input form-textarea" rows="3" placeholder="詳細をご記入ください"></textarea>
+      </div>
+
+      <!-- フォームRow -->
+      <div class="form-row" style="width:100%;">
+        <div class="form-group">
+          <label class="form-label">姓</label>
+          <input type="text" class="form-input" placeholder="山田">
+        </div>
+        <div class="form-group">
+          <label class="form-label">名</label>
+          <input type="text" class="form-input" placeholder="太郎">
+        </div>
+      </div>
+
+      <!-- チェックボックス -->
+      <label class="form-check" style="width:100%;">
+        <input type="checkbox" checked>
+        <span class="form-check-label"><a href="#">利用規約</a>および<a href="#">プライバシーポリシー</a>に同意します</span>
+      </label>
+
+      <!-- ラジオボタン -->
+      <div style="width:100%; display:flex; gap:var(--space-6);">
+        <label class="form-check">
+          <input type="radio" name="attr-demo" checked>
+          <span class="form-check-label">個人</span>
+        </label>
+        <label class="form-check">
+          <input type="radio" name="attr-demo">
+          <span class="form-check-label">法人</span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="ds-sub">認証コード入力</div>
+    <div class="ds-showcase">
+      <div class="code-input-wrap">
+        <input type="text" class="code-input" maxlength="1" value="4">
+        <input type="text" class="code-input" maxlength="1" value="2">
+        <input type="text" class="code-input" maxlength="1" value="1">
+        <input type="text" class="code-input" maxlength="1" value="9">
+        <input type="text" class="code-input" maxlength="1" placeholder="-">
+        <input type="text" class="code-input" maxlength="1" placeholder="-">
+      </div>
+    </div>
+
+    <div class="ds-sub">トグルスイッチ（MFA設定等）</div>
+    <div class="ds-showcase ds-showcase--col" style="max-width:480px;">
+      <div class="toggle-wrap" style="width:100%;">
+        <div>
+          <div class="toggle-label">SMS認証</div>
+          <div class="toggle-desc">ログイン時にSMSで確認コードを送信します</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-sms">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="toggle-wrap" style="width:100%;">
+        <div>
+          <div class="toggle-label">2段階認証（認証アプリ）</div>
+          <div class="toggle-desc">Google Authenticatorなどのアプリでコードを生成します</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" checked id="toggle-totp">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 5. カード・パネル ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">6</span>カード・パネル</h2>
+
+    <div class="ds-sub">通常カード（<code>.heading--panel</code> 見出し）</div>
+    <div class="ds-card-demo">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="heading-md heading--panel" style="margin-bottom:var(--space-1);">パスワード変更</h3>
+            <p class="card-description" style="margin-top:var(--space-3);">現在のパスワードと新しいパスワードを入力してください</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">現在のパスワード <span class="required">*</span></label>
+            <input type="password" class="form-input" placeholder="現在のパスワード">
+          </div>
+          <div class="form-group">
+            <label class="form-label">新しいパスワード <span class="required">*</span></label>
+            <input type="password" class="form-input" placeholder="8文字以上">
+          </div>
+          <div class="form-group">
+            <label class="form-label">新しいパスワード（確認） <span class="required">*</span></label>
+            <input type="password" class="form-input" placeholder="再入力">
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-outline">キャンセル</button>
+          <button class="btn btn-primary">パスワードを変更する</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-sub">グレーアウトカード（Coming Soon）</div>
+    <div class="ds-card-demo">
+      <div class="card card--grayout">
+        <span class="grayout-badge">
+          <svg width="11" height="11" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+          準備中
+        </span>
+        <div class="card-header">
+          <div>
+            <h3 class="heading-md heading--panel" style="margin-bottom:var(--space-1);">お支払い情報管理</h3>
+            <p class="card-description" style="margin-top:var(--space-3);">クレジットカードの登録・変更・削除</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">カード番号</label>
+            <input type="text" class="form-input" placeholder="1234 5678 9012 3456" disabled>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">有効期限</label>
+              <input type="text" class="form-input" placeholder="MM / YY" disabled>
+            </div>
+            <div class="form-group">
+              <label class="form-label">セキュリティコード</label>
+              <input type="text" class="form-input" placeholder="CVC" disabled>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary" disabled>カードを登録する</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6. バッジ ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">7</span>バッジ</h2>
+    <div class="ds-showcase">
+      <span class="badge badge-success">確認済み</span>
+      <span class="badge badge-primary">認証済み</span>
+      <span class="badge badge-info">更新あり</span>
+      <span class="badge badge-warning">要確認</span>
+      <span class="badge badge-danger">エラー</span>
+      <span class="badge badge-neutral">
+        <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        準備中
+      </span>
+    </div>
+  </section>
+
+  <!-- ===== 7. アラート ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">8</span>アラート</h2>
+    <div class="ds-showcase ds-showcase--col">
+      <div class="alert alert-success" style="width:100%;">
+        <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></span>
+        <div class="alert-content">
+          <div class="alert-title">変更が完了しました</div>
+          パスワードが正常に更新されました。
+        </div>
+      </div>
+      <div class="alert alert-warning" style="width:100%;">
+        <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></span>
+        <div class="alert-content">
+          <div class="alert-title">セキュリティに関するお知らせ</div>
+          新しいデバイスからのログインが検出されました。ご自身のアクセスでない場合はパスワードを変更してください。
+        </div>
+      </div>
+      <div class="alert alert-danger" style="width:100%;">
+        <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg></span>
+        <div class="alert-content">
+          <div class="alert-title">認証エラー</div>
+          メールアドレスまたはパスワードが正しくありません。
+        </div>
+      </div>
+      <div class="alert alert-info" style="width:100%;">
+        <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></span>
+        <div class="alert-content">メールアドレスに確認コードを送信しました。メールをご確認ください。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 8. モーダル ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">9</span>モーダル</h2>
+    <div class="ds-showcase">
+      <button class="btn btn-primary" id="open-modal-btn">退会確認モーダルを開く</button>
+      <button class="btn btn-outline" id="open-modal2-btn">情報モーダルを開く</button>
+    </div>
+
+    <!-- 退会確認モーダル -->
+    <div class="modal-overlay" id="modal-delete">
+      <div class="modal">
+        <div class="modal-header">
+          <span class="modal-title">退会手続きの確認</span>
+          <button class="modal-close" data-close="modal-delete">&#215;</button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger">
+            <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></span>
+            <div class="alert-content">
+              <div class="alert-title">この操作は元に戻せません</div>
+              退会するとアカウント情報・履歴・設定がすべて削除されます。
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">確認のため「退会する」と入力してください</label>
+            <input type="text" class="form-input" placeholder="退会する">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" data-close="modal-delete">キャンセル</button>
+          <button class="btn btn-danger">退会手続きを完了する</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 情報モーダル -->
+    <div class="modal-overlay" id="modal-info">
+      <div class="modal">
+        <div class="modal-header">
+          <span class="modal-title">認証アプリの設定</span>
+          <button class="modal-close" data-close="modal-info">&#215;</button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-info">
+            <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></span>
+            <div class="alert-content">Google AuthenticatorまたはAuthyでQRコードをスキャンしてください。</div>
+          </div>
+          <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:var(--space-8);display:flex;align-items:center;justify-content:center;">
+            <div style="width:120px;height:120px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:12px;">QRコード</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">確認コードを入力 <span class="required">*</span></label>
+            <div class="code-input-wrap" style="justify-content:flex-start;">
+              <input type="text" class="code-input" maxlength="1" placeholder="-">
+              <input type="text" class="code-input" maxlength="1" placeholder="-">
+              <input type="text" class="code-input" maxlength="1" placeholder="-">
+              <input type="text" class="code-input" maxlength="1" placeholder="-">
+              <input type="text" class="code-input" maxlength="1" placeholder="-">
+              <input type="text" class="code-input" maxlength="1" placeholder="-">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" data-close="modal-info">キャンセル</button>
+          <button class="btn btn-primary">認証を完了する</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 9. トースト ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">10</span>トースト</h2>
+    <div class="ds-showcase" style="flex-wrap:wrap;">
+      <button class="btn btn-primary" id="toast-success-btn">成功トーストを表示</button>
+      <button class="btn btn-danger-outline" id="toast-error-btn">エラートーストを表示</button>
+      <button class="btn btn-outline" id="toast-info-btn">情報トーストを表示</button>
+    </div>
+  </section>
+
+  <!-- ===== 10. ヘッダー ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">11</span>ヘッダー</h2>
+
+    <div class="ds-sub">パブリック画面 — ログイン前（<code>.header.header--primary</code>）</div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:var(--space-3);">トップページ・認証ページ・お知らせページで使用。グリーン背景にロゴテキスト白。</p>
+    <div style="border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:var(--space-5);">
+      <div class="header header--primary" style="position:relative;">
+        <div class="header-inner">
+          <a class="logo" href="#">
+            <div class="logo-mark">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 4h4l8 12h4V20h-4L8 8H4V4z"/>
+              </svg>
+            </div>
+            <span class="logo-text">ネザー<span>ID</span></span>
+          </a>
+          <div class="header-actions">
+            <a href="#" class="btn btn-ghost-white btn-sm">ログイン</a>
+            <a href="#" class="btn btn-white btn-sm">新規登録（無料）</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-sub">パブリック画面 — 認証ページ（ボタンなし）</div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:var(--space-3);">verify・recovery 等、フォーカスを絞る画面ではアクションボタンを省略。</p>
+    <div style="border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:var(--space-5);">
+      <div class="header header--primary" style="position:relative;">
+        <div class="header-inner">
+          <a class="logo" href="#">
+            <div class="logo-mark">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 4h4l8 12h4V20h-4L8 8H4V4z"/>
+              </svg>
+            </div>
+            <span class="logo-text">ネザー<span>ID</span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-sub">マイページ（ログイン後）</div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:var(--space-3);">マイページは独自の <code>.mp-header</code> クラスを使用（<code>mypage/dashboard/style.css</code> 参照）。ベルアイコン・ユーザーアイコンを配置。</p>
+    <div style="border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;">
+      <div style="background:var(--primary);height:56px;display:flex;align-items:center;padding:0 20px;justify-content:space-between;">
+        <a style="display:flex;align-items:center;gap:8px;text-decoration:none;" href="#">
+          <div style="width:32px;height:32px;background:rgba(255,255,255,0.2);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 4h4l8 12h4V20h-4L8 8H4V4z"/>
+            </svg>
+          </div>
+          <span style="font-size:17px;font-weight:700;color:#fff;letter-spacing:0.02em;">ネザーID</span>
+        </a>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <button style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;border:none;background:none;color:#fff;cursor:pointer;" aria-label="お知らせ">
+            <svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true">
+              <path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880t42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80zM480-80q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80M320-280h320v-280q0-66-47-113t-113-47-113 47-47 113z"/>
+            </svg>
+          </button>
+          <button style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;border:none;background:none;color:#fff;cursor:pointer;" aria-label="マイページ">
+            <svg width="22" height="22" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true">
+              <path d="M480-480q-66 0-113-47t-47-113 47-113 113-47 113 47 47 113-47 113-113 47M160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440t130 15.5T736-378q29 15 46.5 43.5T800-272v112z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 11. サイドバー ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">12</span>サイドバー（マイページ）</h2>
+
+    <div class="ds-sidebar-mock">
+      <div class="sidebar" style="position:static;height:auto;width:auto;">
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">アカウント</div>
+          <a class="sidebar-nav-item active" href="#">
+            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            ダッシュボード
+          </a>
+          <a class="sidebar-nav-item" href="#">
+            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            ユーザー情報管理
+          </a>
+          <a class="sidebar-nav-item" href="#">
+            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            セキュリティ設定
+          </a>
+          <a class="sidebar-nav-item" href="#">
+            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+            アカウント管理
+          </a>
+          <a class="sidebar-nav-item" href="#">
+            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+            連携サービス一覧
+          </a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Coming Soon</div>
+          <span class="sidebar-nav-item sidebar-nav-item--disabled">
+            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            本人確認（KYC）
+            <span class="sidebar-lock-badge">
+              <svg width="9" height="9" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+              準備中
+            </span>
+          </span>
+          <span class="sidebar-nav-item sidebar-nav-item--disabled">
+            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+            お支払い情報
+            <span class="sidebar-lock-badge">
+              <svg width="9" height="9" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+              準備中
+            </span>
+          </span>
+          <span class="sidebar-nav-item sidebar-nav-item--disabled">
+            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+            ポイント・売上金
+            <span class="sidebar-lock-badge">
+              <svg width="9" height="9" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+              準備中
+            </span>
+          </span>
+          <span class="sidebar-nav-item sidebar-nav-item--disabled">
+            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            ご利用明細
+            <span class="sidebar-lock-badge">
+              <svg width="9" height="9" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+              準備中
+            </span>
+          </span>
+          <span class="sidebar-nav-item sidebar-nav-item--disabled">
+            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            アフィリエイト管理
+            <span class="sidebar-lock-badge">
+              <svg width="9" height="9" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+              準備中
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 12. お知らせリスト ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">13</span>お知らせリスト</h2>
+
+    <div class="ds-card-demo">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">お知らせ</div>
+          <span class="badge badge-primary">2 件の未読</span>
+        </div>
+        <div class="notification-list">
+          <a class="notification-item notification-item--unread" href="#">
+            <span class="notification-dot"></span>
+            <div class="notification-body">
+              <div class="notification-title">システムメンテナンスのお知らせ</div>
+              <div class="notification-date">2026年5月10日</div>
+            </div>
+            <span class="notification-arrow">&#8250;</span>
+          </a>
+          <a class="notification-item notification-item--unread" href="#">
+            <span class="notification-dot"></span>
+            <div class="notification-body">
+              <div class="notification-title">新しいサービスが追加されました</div>
+              <div class="notification-date">2026年5月8日</div>
+            </div>
+            <span class="notification-arrow">&#8250;</span>
+          </a>
+          <a class="notification-item" href="#">
+            <span class="notification-dot"></span>
+            <div class="notification-body">
+              <div class="notification-title">利用規約の改定について</div>
+              <div class="notification-date">2026年4月30日</div>
+            </div>
+            <span class="notification-arrow">&#8250;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 13. 連携サービスカード ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">14</span>連携サービスカード</h2>
+
+    <div class="service-grid" style="max-width:680px;">
+      <a class="service-card" href="#">
+        <div class="service-card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="color:var(--text-muted);" aria-hidden="true"><path d="M20 4H4v2l16 .01V4zM4 22h16v-7.99l2 .01V8l-3-4H5L2 8v6l2-.01V22zm2-2v-5.99h12V20H6zm1-8h10v2H7v-2z"/></svg>
+        </div>
+        <div class="service-card-name">関連サービスA</div>
+        <div class="service-card-desc">サイト売買プラットフォーム。netheridアカウントでログインできます。</div>
+        <span class="service-card-link">サービスへ移動 &#8594;</span>
+      </a>
+      <a class="service-card" href="#">
+        <div class="service-card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="color:var(--text-muted);" aria-hidden="true"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>
+        </div>
+        <div class="service-card-name">関連サービスB</div>
+        <div class="service-card-desc">アクセス解析・レポートツール。</div>
+        <span class="service-card-link">サービスへ移動 &#8594;</span>
+      </a>
+      <a class="service-card" href="#">
+        <div class="service-card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="color:var(--text-muted);" aria-hidden="true"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+        </div>
+        <div class="service-card-name">関連サービスC</div>
+        <div class="service-card-desc">コミュニティフォーラム・サポート。</div>
+        <span class="service-card-link">サービスへ移動 &#8594;</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== 14. ログイン履歴 ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">15</span>ログイン履歴</h2>
+
+    <div class="ds-card-demo">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">ログイン履歴</div>
+        </div>
+        <div class="card-body" style="gap:0;padding:0;">
+          <div class="login-history-list" style="padding:0 var(--space-6);">
+            <div class="login-history-item">
+              <div class="login-history-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:var(--text-muted);" aria-hidden="true"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg>
+              </div>
+              <div class="login-history-body">
+                <div class="login-history-device">Chrome / macOS</div>
+                <div class="login-history-meta">2026-05-09 14:32 &middot; 203.0.113.1 &middot; 東京都</div>
+              </div>
+              <div class="login-history-status">
+                <span class="badge badge-success">現在</span>
+              </div>
+            </div>
+            <div class="login-history-item">
+              <div class="login-history-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:var(--text-muted);" aria-hidden="true"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+              </div>
+              <div class="login-history-body">
+                <div class="login-history-device">Safari / iOS 17</div>
+                <div class="login-history-meta">2026-05-08 09:15 &middot; 203.0.113.2 &middot; 東京都</div>
+              </div>
+              <div class="login-history-status">
+                <span class="badge badge-neutral">ログアウト済み</span>
+              </div>
+            </div>
+            <div class="login-history-item">
+              <div class="login-history-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:var(--text-muted);" aria-hidden="true"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg>
+              </div>
+              <div class="login-history-body">
+                <div class="login-history-device">Firefox / Windows 11</div>
+                <div class="login-history-meta">2026-05-07 18:44 &middot; 203.0.113.3 &middot; 大阪府</div>
+              </div>
+              <div class="login-history-status">
+                <span class="badge badge-warning">注意</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 15. ステップインジケーター ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">16</span>ステップインジケーター</h2>
+
+    <div class="ds-showcase ds-showcase--col">
+      <div class="step-indicator" style="max-width:360px;width:100%;">
+        <div class="step done">
+          <div class="step-num">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+          </div>
+          <span>メール入力</span>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step active">
+          <div class="step-num">2</div>
+          <span>コード確認</span>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <span>完了</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 16. スケルトン ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">17</span>スケルトン（ローディング）</h2>
+
+    <div class="ds-card-demo">
+      <div class="card">
+        <div class="card-header" style="gap:var(--space-4);">
+          <div class="skeleton skeleton-avatar"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:var(--space-2);">
+            <div class="skeleton skeleton-text skeleton-text--long"></div>
+            <div class="skeleton skeleton-text skeleton-text--short"></div>
+          </div>
+        </div>
+        <div class="card-body" style="gap:var(--space-3);">
+          <div class="skeleton skeleton-text" style="height:14px;width:100%;"></div>
+          <div class="skeleton skeleton-text" style="height:14px;width:80%;"></div>
+          <div class="skeleton skeleton-text" style="height:14px;width:90%;"></div>
+        </div>
+        <div class="card-footer">
+          <div class="skeleton skeleton-btn"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 17. スペーシング ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">18</span>スペーシング</h2>
+    <div class="ds-showcase">
+      <div class="ds-spacing-demo">
+        <div class="ds-space-block"><div class="ds-space-bar" style="width:4px;"></div><div class="ds-space-label">--space-1<br>4px</div></div>
+        <div class="ds-space-block"><div class="ds-space-bar" style="width:8px;"></div><div class="ds-space-label">--space-2<br>8px</div></div>
+        <div class="ds-space-block"><div class="ds-space-bar" style="width:12px;"></div><div class="ds-space-label">--space-3<br>12px</div></div>
+        <div class="ds-space-block"><div class="ds-space-bar" style="width:16px;"></div><div class="ds-space-label">--space-4<br>16px</div></div>
+        <div class="ds-space-block"><div class="ds-space-bar" style="width:24px;"></div><div class="ds-space-label">--space-6<br>24px</div></div>
+        <div class="ds-space-block"><div class="ds-space-bar" style="width:32px;"></div><div class="ds-space-label">--space-8<br>32px</div></div>
+        <div class="ds-space-block"><div class="ds-space-bar" style="width:40px;"></div><div class="ds-space-label">--space-10<br>40px</div></div>
+        <div class="ds-space-block"><div class="ds-space-bar" style="width:48px;"></div><div class="ds-space-label">--space-12<br>48px</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 18. 角丸 ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">19</span>角丸（Border Radius）</h2>
+    <div class="ds-showcase">
+      <div class="ds-radius-demo">
+        <div class="ds-radius-box" style="border-radius:4px;"><span>xs</span><span>4px</span></div>
+        <div class="ds-radius-box" style="border-radius:6px;"><span>sm</span><span>6px</span></div>
+        <div class="ds-radius-box" style="border-radius:8px;"><span>base</span><span>8px</span></div>
+        <div class="ds-radius-box" style="border-radius:12px;"><span>lg</span><span>12px</span></div>
+        <div class="ds-radius-box" style="border-radius:16px;"><span>xl</span><span>16px</span></div>
+        <div class="ds-radius-box" style="border-radius:9999px;width:64px;height:64px;"><span>full</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 19. シャドウ ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">20</span>シャドウ</h2>
+    <div class="ds-showcase ds-showcase--bg">
+      <div class="ds-shadow-demo">
+        <div class="ds-shadow-box" style="box-shadow:var(--shadow-xs);">--shadow-xs</div>
+        <div class="ds-shadow-box" style="box-shadow:var(--shadow-sm);">--shadow-sm</div>
+        <div class="ds-shadow-box" style="box-shadow:var(--shadow);">--shadow</div>
+        <div class="ds-shadow-box" style="box-shadow:var(--shadow-md);">--shadow-md</div>
+        <div class="ds-shadow-box" style="box-shadow:var(--shadow-lg);">--shadow-lg</div>
+        <div class="ds-shadow-box" style="box-shadow:var(--shadow-xl);">--shadow-xl</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 20. エンプティステート ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">21</span>エンプティステート</h2>
+    <div class="ds-showcase" style="justify-content:center;">
+      <div class="empty-state" style="padding:var(--space-12) var(--space-6);">
+        <div class="empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="color:var(--text-light);" aria-hidden="true"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+        </div>
+        <div class="empty-title">お知らせはありません</div>
+        <div class="empty-sub">現在、新しいお知らせはありません。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 21. ディバイダー ===== -->
+  <section class="ds-section">
+    <h2 class="ds-section-title"><span class="ds-num">22</span>ディバイダー</h2>
+    <div class="ds-showcase ds-showcase--col" style="max-width:480px;">
+      <div class="divider" style="width:100%;">または</div>
+      <div class="divider" style="width:100%;">追加情報</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Toast Container -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script src="/jquery-4.0.0.min.js"></script>
+<script>
+$(function () {
+
+  /* パスワード表示切替 */
+  $('#toggle-pw-btn').on('click', function () {
+    var $input = $('#pw-demo');
+    var isPassword = $input.attr('type') === 'password';
+    $input.attr('type', isPassword ? 'text' : 'password');
+    $('#pw-icon-show').toggle(!isPassword);
+    $('#pw-icon-hide').toggle(isPassword);
+  });
+
+  /* モーダル開閉 */
+  $('#open-modal-btn').on('click', function () {
+    $('#modal-delete').addClass('active');
+    $('body').addClass('modal-open');
+  });
+
+  $('#open-modal2-btn').on('click', function () {
+    $('#modal-info').addClass('active');
+    $('body').addClass('modal-open');
+  });
+
+  $(document).on('click', '[data-close]', function () {
+    var target = $(this).data('close');
+    $('#' + target).removeClass('active');
+    $('body').removeClass('modal-open');
+  });
+
+  $(document).on('click', '.modal-overlay', function (e) {
+    if ($(e.target).hasClass('modal-overlay')) {
+      $(this).removeClass('active');
+      $('body').removeClass('modal-open');
+    }
+  });
+
+  /* トースト */
+  function showToast(text, type) {
+    var $wrap = $('#toast-wrap');
+    var $toast = $('<div class="toast toast-' + type + '"></div>').text(text);
+    $wrap.append($toast);
+    setTimeout(function () {
+      $toast.fadeOut(300, function () { $(this).remove(); });
+    }, 3000);
+  }
+
+  $('#toast-success-btn').on('click', function () {
+    showToast('変更を保存しました', 'success');
+  });
+
+  $('#toast-error-btn').on('click', function () {
+    showToast('エラーが発生しました。再度お試しください', 'error');
+  });
+
+  $('#toast-info-btn').on('click', function () {
+    showToast('確認メールを送信しました', 'info');
+  });
+
+});
+</script>
+</body>
+</html>

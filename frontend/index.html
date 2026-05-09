@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ネザーID — WEBサイト運営に役立つネザーWEBサービスの共通ID</title>
+  <meta name="description" content="ネザーIDは、WEBサイト運営に役立つ様々なネザーWEBサービスを使うために必要な共通IDです。無料で登録できます。">
+  <script src="/jquery-4.0.0.min.js"></script>
+  <script>
+    (function () {
+      var n = new Date();
+      var v = n.getFullYear() + ("00"+(n.getMonth()+1)).slice(-2) + ("00"+n.getDate()).slice(-2) + ("00"+n.getHours()).slice(-2) + ("00"+n.getMinutes()).slice(-2) + ("00"+n.getSeconds()).slice(-2);
+      document.write('<link rel="stylesheet" href="/design-system/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/style.css?v=' + v + '">');
+      document.write('<script src="/common.js?v=' + v + '"><\/script>');
+      document.write('<script src="/script.js?v=' + v + '"><\/script>');
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header header--primary">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <div class="logo-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h4l8 12h4V20h-4L8 8H4V4z"/>
+          </svg>
+        </div>
+        <span class="logo-text">ネザー<span>ID</span></span>
+      </a>
+      <div class="header-actions">
+        <a href="/auth/login/" class="btn btn-ghost-white btn-sm header-login-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="header-btn-label">ログイン</span>
+        </a>
+        <a href="/auth/register/" class="btn btn-white btn-sm">
+          <span class="header-register-full">新規登録（無料）</span>
+          <span class="header-register-short">新規登録</span>
+        </a>
+      </div>
+      <button class="header-hamburger" id="hamburger-btn" aria-label="メニューを開く" aria-expanded="false">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== MOBILE NAV ===== -->
+  <div id="mobile-nav-overlay" class="mobile-nav-overlay"></div>
+  <div id="mobile-nav" class="mobile-nav" aria-hidden="true">
+    <div class="mobile-nav-actions">
+      <a href="/auth/login/" class="btn btn-primary btn-full">ログイン</a>
+      <a href="/auth/register/" class="btn btn-outline btn-full">新規登録（無料）</a>
+    </div>
+  </div>
+
+  <!-- ===== DEACTIVATED NOTICE (hidden by default, shown via JS) ===== -->
+  <div id="lp-deactivated-notice" style="display:none; background: var(--info-light); border-bottom: 1px solid rgba(2,132,199,0.2); padding: 12px 24px;">
+    <div style="max-width: 960px; margin: 0 auto; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #0c4a6e;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      アカウントが無効化されました。詳細は登録メールアドレスをご確認ください。
+    </div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="lp-hero">
+    <h1 class="lp-hero-brand">ネザー<span>ID</span></h1>
+    <p class="lp-hero-tagline">WEBサイト運営に役立つ様々なネザーWEBサービスを使うために<br>必要な共通IDです。</p>
+    <!-- <span class="lp-hero-submsg">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </svg>
+      便利な新サービス・新機能を続々リリース中！
+    </span> -->
+    <!-- <div class="lp-hero-actions">
+      <a href="/auth/register/" class="btn btn-primary btn-lg">無料で登録する</a>
+      <a href="/auth/login/" class="btn btn-outline btn-lg">ログイン</a>
+    </div> -->
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section class="lp-services">
+    <p class="lp-services-heading">WEB SERVICES</p>
+    <div class="lp-services-grid">
+
+      <!-- 1. ネザーM&A -->
+      <a href="#" class="lp-service-card">
+        <div class="lp-service-banner" style="background:#059669;">
+          <span class="lp-service-banner-label">M&amp;A</span>
+        </div>
+        <div class="lp-service-body">
+          <div class="lp-service-name">ネザーM&amp;A</div>
+          <div class="lp-service-desc">ウェブサイト・ネット事業のM&amp;Aプラットフォーム。弁護士・税理士サポート付き</div>
+        </div>
+      </a>
+
+      <!-- 2. ネザーサイトマーケット -->
+      <a href="#" class="lp-service-card">
+        <div class="lp-service-banner" style="background:#0891b2;">
+          <span class="lp-service-banner-label">SM</span>
+        </div>
+        <div class="lp-service-body">
+          <div class="lp-service-name">ネザーサイトマーケット</div>
+          <div class="lp-service-desc">WordPressサイトのかんたん売買</div>
+        </div>
+      </a>
+
+      <!-- 3. ネザーキーワード -->
+      <a href="#" class="lp-service-card">
+        <div class="lp-service-banner" style="background:#7c3aed;">
+          <span class="lp-service-banner-label">KW</span>
+        </div>
+        <div class="lp-service-body">
+          <div class="lp-service-name">ネザーキーワード</div>
+          <div class="lp-service-desc">無料のキーワードリサーチツール</div>
+        </div>
+      </a>
+
+      <!-- 4. ネザーサーバー -->
+      <a href="#" class="lp-service-card">
+        <div class="lp-service-banner" style="background:#dc2626;">
+          <span class="lp-service-banner-label">SV</span>
+        </div>
+        <div class="lp-service-body">
+          <div class="lp-service-name">ネザーサーバー</div>
+          <div class="lp-service-desc">高速レンタルサーバー</div>
+        </div>
+      </a>
+
+      <!-- 5. ネザードメイン -->
+      <a href="#" class="lp-service-card">
+        <div class="lp-service-banner" style="background:#d97706;">
+          <span class="lp-service-banner-label">DM</span>
+        </div>
+        <div class="lp-service-body">
+          <div class="lp-service-name">ネザードメイン</div>
+          <div class="lp-service-desc">ドメイン取得・管理 .com .net .jp</div>
+        </div>
+      </a>
+
+      <!-- 6. ネザードメインマーケット -->
+      <a href="#" class="lp-service-card">
+        <div class="lp-service-banner" style="background:#0284c7;">
+          <span class="lp-service-banner-label">MK</span>
+        </div>
+        <div class="lp-service-body">
+          <div class="lp-service-name">ネザードメインマーケット</div>
+          <div class="lp-service-desc">ドメイン売買マーケット 100円〜</div>
+        </div>
+      </a>
+
+      <!-- 7. 中古ドメイン販売屋さん -->
+      <a href="#" class="lp-service-card">
+        <div class="lp-service-banner" style="background:#65a30d;">
+          <span class="lp-service-banner-label">CD</span>
+        </div>
+        <div class="lp-service-body">
+          <div class="lp-service-name">中古ドメイン販売屋さん</div>
+          <div class="lp-service-desc">良質な中古ドメインを販売</div>
+        </div>
+      </a>
+
+      <!-- 8. ネザーIDアフィリエイト -->
+      <a href="#" class="lp-service-card">
+        <div class="lp-service-banner" style="background:#db2777;">
+          <span class="lp-service-banner-label">AF</span>
+        </div>
+        <div class="lp-service-body">
+          <div class="lp-service-name">ネザーIDアフィリエイト</div>
+          <div class="lp-service-desc">高額報酬のアフィリエイトプログラム</div>
+        </div>
+      </a>
+
+      <!-- 9. ネザーツールズ -->
+      <a href="#" class="lp-service-card">
+        <div class="lp-service-banner" style="background:#4f46e5;">
+          <span class="lp-service-banner-label">TL</span>
+        </div>
+        <div class="lp-service-body">
+          <div class="lp-service-name">ネザーツールズ</div>
+          <div class="lp-service-desc">無料のWebツール集（ユーザー登録なし）</div>
+        </div>
+      </a>
+
+      <!-- 10. サポート -->
+      <a href="#" class="lp-service-card">
+        <div class="lp-service-banner" style="background:#6b7280;">
+          <span class="lp-service-banner-label">SP</span>
+        </div>
+        <div class="lp-service-body">
+          <div class="lp-service-name">サポート</div>
+          <div class="lp-service-desc">マニュアル・よくある質問・AIチャットで疑問を解決</div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== NEWS ===== -->
+  <section class="lp-news">
+    <div class="lp-news-inner">
+      <div class="lp-news-header">
+        <h2 class="lp-news-title">お知らせ一覧</h2>
+        <a href="/notification/" class="lp-news-more">もっと見る
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-left:2px;">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </a>
+      </div>
+      <div>
+
+        <a href="#" class="lp-news-item">
+          <span class="lp-news-date">2026-05-09</span>
+          <span class="lp-news-category"><span class="badge badge-primary">ネザーID</span></span>
+          <span class="lp-news-text">メンテナンスのお知らせ</span>
+        </a>
+
+        <a href="#" class="lp-news-item">
+          <span class="lp-news-date">2026-05-01</span>
+          <span class="lp-news-category"><span class="badge badge-neutral">ネザードメイン</span></span>
+          <span class="lp-news-text">レジストリメンテナンスのお知らせ</span>
+        </a>
+
+        <a href="#" class="lp-news-item">
+          <span class="lp-news-date">2026-04-25</span>
+          <span class="lp-news-category"><span class="badge badge-warning">ネザーキーワード</span></span>
+          <span class="lp-news-text">利用規約改定のお知らせ</span>
+        </a>
+
+        <a href="#" class="lp-news-item">
+          <span class="lp-news-date">2026-04-18</span>
+          <span class="lp-news-category"><span class="badge badge-success">ネザーM&amp;A</span></span>
+          <span class="lp-news-text">新機能リリースのお知らせ</span>
+        </a>
+
+        <a href="#" class="lp-news-item">
+          <span class="lp-news-date">2026-04-10</span>
+          <span class="lp-news-category"><span class="badge badge-neutral">ネザーサーバー</span></span>
+          <span class="lp-news-text">障害復旧のお知らせ</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SUPPORT ===== -->
+  <!-- <section class="lp-support">
+    <div class="lp-support-inner">
+      <p class="lp-support-text">わからないことは<strong>「マニュアル・よくある質問」</strong>ですぐ解決するかも</p>
+      <div class="lp-support-actions">
+        <a href="#" class="btn btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          よくある質問を見る
+        </a>
+        <a href="#" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          AIに質問する
+        </a>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="lp-footer">
+    <div class="lp-footer-inner">
+      <div class="lp-footer-grid">
+
+        <!-- Col 1: Brand -->
+        <div class="lp-footer-col">
+          <a href="/" class="logo" style="margin-bottom:8px;">
+            <div class="logo-mark">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h4l8 12h4V20h-4L8 8H4V4z"/>
+              </svg>
+            </div>
+            <span class="logo-text">ネザー<span>ID</span></span>
+          </a>
+          <p class="lp-footer-tagline">WEBサイト運営の共通ID</p>
+        </div>
+
+        <!-- Col 2: サポート -->
+        <div class="lp-footer-col">
+          <p class="lp-footer-col-title">サポート</p>
+          <div class="lp-footer-links">
+            <a href="#">よくある質問</a>
+            <a href="#">お問い合わせ</a>
+            <a href="#">マニュアル</a>
+          </div>
+        </div>
+
+        <!-- Col 3: アカウント -->
+        <div class="lp-footer-col">
+          <p class="lp-footer-col-title">アカウント</p>
+          <div class="lp-footer-links">
+            <a href="/auth/register/">新規登録</a>
+            <a href="/auth/login/">ログイン</a>
+            <a href="/auth/password-reset/">パスワード再設定</a>
+          </div>
+        </div>
+
+        <!-- Col 4: 運営会社 -->
+        <div class="lp-footer-col">
+          <p class="lp-footer-col-title">運営会社</p>
+          <div class="lp-footer-links">
+            <a href="#">運営会社情報</a>
+            <a href="#">特定商取引法に基づく表記</a>
+          </div>
+        </div>
+
+        <!-- Col 5: サービス -->
+        <div class="lp-footer-col">
+          <p class="lp-footer-col-title">サービス</p>
+          <div class="lp-footer-links">
+            <a href="#">ネザーM&amp;A</a>
+            <a href="#">ネザーキーワード</a>
+            <a href="#">ネザーサーバー</a>
+            <a href="#">ネザードメイン</a>
+          </div>
+        </div>
+
+      </div>
+      <p class="lp-footer-copy">Copyright &copy; 2026 ネザーID All Rights Reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

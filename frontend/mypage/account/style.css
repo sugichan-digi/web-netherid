@@ -1,0 +1,66 @@
+/* ===================================================
+   アカウント管理 — style.css
+   =================================================== */
+
+/* 危険ゾーンカード */
+.danger-zone {
+  border-color: #fecaca;
+}
+
+.danger-zone .heading--panel::after {
+  background: linear-gradient(to right, var(--danger) 32px, var(--border) 32px);
+}
+
+/* アカウント情報行 */
+.account-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-6);
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.account-info-row:last-child {
+  border-bottom: none;
+}
+
+.account-info-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  min-width: 120px;
+}
+
+.account-info-value {
+  font-size: 14px;
+  color: var(--text);
+  text-align: right;
+}
+
+/* 退会リスト */
+.account-deactivate-list {
+  list-style: none;
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.account-deactivate-list li {
+  font-size: 13px;
+  padding-left: var(--space-4);
+  position: relative;
+  line-height: 1.6;
+}
+
+.account-deactivate-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  background: var(--warning);
+  border-radius: var(--radius-full);
+}
