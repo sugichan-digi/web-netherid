@@ -1,0 +1,56 @@
+// NetherID Custom Backend Database Schema
+// Kratos handles authentication and stores identity data in the `db_user` database.
+// This schema represents the custom backend tables managed separately.
+
+Table users {
+  id bigint [pk, increment]
+  kratos_identity_id char(36) [unique, not null, note: 'Kratosで発行されたIdentityのUUID']
+  created_at datetime [not null]
+  updated_at datetime [not null]
+}
+
+Table notifications {
+  id bigint [pk, increment]
+  title varchar(255) [not null]
+  content text
+  url varchar(255)
+  published_at datetime [not null]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+}
+
+Table services {
+  id varchar(50) [pk, note: '例: nether_blog']
+  name varchar(100) [not null]
+  description varchar(255)
+  sso_url varchar(255) [not null]
+  icon_url varchar(255)
+  is_active boolean [default: true]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+}
+
+Table user_linked_services {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id]
+  service_id varchar(50) [not null, ref: > services.id]
+  linked_at datetime [not null]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  indexes {
+    (user_id, service_id) [unique]
+  }
+}
+
+Table inquiries {
+  id bigint [pk, increment]
+  user_id bigint [ref: > users.id, note: 'ログイン済みの場合はユーザーIDを保持']
+  email varchar(255) [not null, note: '連絡先メールアドレス']
+  type varchar(50) [not null, note: 'お問い合わせ種別']
+  subject varchar(255) [not null]
+  body text [not null]
+  status varchar(20) [default: 'open', note: 'ステータス: open, in_progress, closed']
+  created_at datetime [not null]
+  updated_at datetime [not null]
+}

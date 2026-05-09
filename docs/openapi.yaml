@@ -1,0 +1,176 @@
+openapi: 3.0.3
+info:
+  title: NetherID Custom Backend API
+  description: NetherIDの独自バックエンド（Laravel）が提供するAPI仕様。認証はOry KratosのセッションCookieを利用します。
+  version: 1.0.0
+servers:
+  - url: https://api.netherid.example.com
+    description: Production Server
+  - url: http://localhost:8000
+    description: Local Development Server
+
+paths:
+  /dashboard/init:
+    get:
+      summary: ダッシュボード初期情報取得
+      description: マイページに必要な「お知らせ」と「サービス連携状況」を一括取得します。KratosセッションCookieが必須です。
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      kratos_identity_id:
+                        type: string
+                        format: uuid
+                        example: 123e4567-e89b-12d3-a456-426614174000
+                  notifications:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: NetherIDをリリースしました
+                        content:
+                          type: string
+                          example: 共通ID管理プラットフォーム「NetherID」のベータ版提供を開始しました。
+                        url:
+                          type: string
+                          nullable: true
+                          example: null
+                        published_at:
+                          type: string
+                          format: date-time
+                          example: "2026-05-08T12:00:00Z"
+                  services:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: subscr_optimizer
+                        name:
+                          type: string
+                          example: サブスク管理人
+                        description:
+                          type: string
+                          example: サブスクリプションを一元管理し、無駄な支出を最適化するツール。
+                        sso_url:
+                          type: string
+                          format: uri
+                          example: https://subscr-optimizer.example.com/auth/sso
+                        icon_url:
+                          type: string
+                          example: /assets/icons/subscr_optimizer.svg
+                        is_active:
+                          type: boolean
+                          example: true
+                        is_linked:
+                          type: boolean
+                          example: true
+                        linked_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          example: "2026-05-09T10:00:00Z"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /inquiries:
+    post:
+      summary: お問い合わせ送信
+      description: ダッシュボードやパブリックページからの問い合わせ内容を送信します。未ログインの場合はuser_idなしとして登録されます。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - type
+                - subject
+                - body
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                type:
+                  type: string
+                  example: account
+                  description: "お問い合わせ種別 (例: account, payment, other)"
+                subject:
+                  type: string
+                  example: パスワードを忘れました
+                body:
+                  type: string
+                  example: リカバリコードも紛失してしまったため、リセットをお願いします。
+      responses:
+        '201':
+          description: 送信成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: お問い合わせを受け付けました。ご入力のメールアドレス宛に控えを送信しました。
+                  inquiry_id:
+                    type: integer
+                    example: 1
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: ory_kratos_session
+      description: Kratosから発行されたセッションCookie
+  responses:
+    UnauthorizedError:
+      description: 認証エラー (未ログインまたはセッション無効)
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Unauthenticated.
+    ValidationError:
+      description: バリデーションエラー
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: The given data was invalid.
+              errors:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
+                example:
+                  email: ["The email field is required."]
