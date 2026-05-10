@@ -1,23 +1,23 @@
 $(function () {
 
-  /* =====================================================
-     データ保持用
-     ===================================================== */
+  /* お知らせ一覧データ（API から取得後に格納する） */
   var notifications = [];
 
-  /* =====================================================
-     初期化
-     ===================================================== */
+  /* ===== 初期化 ===== */
   initNotificationPage();
 
   function initNotificationPage() {
+    // セッション情報を取得してヘッダーを構築する（ログイン状態に関わらず実行）
     getSessionSilent()
       .done(function (data) {
         setupNotifPageHeader(data);
       });
 
+    // お知らせ一覧を取得してリストを描画する
     fetchNotifications();
   }
+
+  /* ===== API からお知らせデータを取得 ===== */
 
   function fetchNotifications() {
     api({
@@ -25,22 +25,24 @@ $(function () {
       path: '/dashboard/init'
     })
       .done(function (data) {
-        // API データを表示用フォーマットに変換
+        // API レスポンスを画面表示用の形式に変換して保持する
         notifications = (data.notifications || []).map(function(n) {
           return {
-            id: n.id,
-            date: n.published_at ? n.published_at.split(' ')[0] : '',
-            service: 'ネザーID',
-            serviceClass: 'badge-service-id',
-            category: 'お知らせ',
+            id:            n.id,
+            date:          n.published_at ? n.published_at.split(' ')[0] : '',
+            service:       'ネザーID',
+            serviceClass:  'badge-service-id',
+            category:      'お知らせ',
             categoryClass: 'badge-cat-info',
-            filterKey: 'all',
-            title: n.title,
-            body: n.content
+            filterKey:     'all',
+            title:         n.title,
+            body:          n.content  // モーダルの本文に使用する（HTML を許容する）
           };
         });
 
         renderRows();
+        // ヘッダーの通知ポップアップも更新する（fetchNotifications と setupNotifPageHeader の
+        // どちらが先に完了するかは非同期のため、両方から updateHeaderNotifPopup を呼び出す）
         updateHeaderNotifPopup();
       })
       .fail(function () {
@@ -49,9 +51,9 @@ $(function () {
       });
   }
 
-  /* =====================================================
-     ログイン状態確認・ヘッダー切り替え
-     ===================================================== */
+  /* ===== ログイン状態確認・ヘッダー切り替え ===== */
+  // このページは独自のヘッダーを持つため、common.js の initHeaderPopups() は使用せず
+  // セッション情報を受け取ってヘッダーを動的に組み立てる
 
   function setupNotifPageHeader(sessionData) {
     var identity = sessionData.identity || {};
@@ -62,7 +64,7 @@ $(function () {
     var $actions = $('.header-actions');
     $actions.empty();
 
-    // 通知ボタン
+    /* 通知ボタン + ポップアップ */
     var $notifWrap = $('<div class="popup-wrap"></div>');
     var $notifBtn  = $(
       '<button class="header-icon-btn" id="js-nt-notif-btn" title="お知らせ" aria-expanded="false">' +
@@ -74,7 +76,7 @@ $(function () {
     var $notifPopup = $('<div id="js-nt-notif-popup" class="popup-dropdown notif-dropdown" style="display:none;" role="dialog" aria-label="お知らせ"></div>');
     $notifWrap.append($notifBtn, $notifPopup);
 
-    // アカウントボタン
+    /* アカウントボタン + ポップアップ */
     var $userWrap = $('<div class="popup-wrap"></div>');
     var $userBtn  = $(
       '<button class="header-icon-btn" id="js-nt-user-btn" title="アカウント" aria-expanded="false">' +
@@ -88,12 +90,13 @@ $(function () {
 
     $actions.append($notifWrap, $userWrap);
 
-    // ポップアップ描画更新
+    // ポップアップの初期描画（通知データが既に取得済みの場合は反映される）
     updateHeaderNotifPopup();
 
-    // 通知ポップアップ開閉
+    /* 通知ポップアップの開閉 */
     $notifBtn.on('click', function (e) {
       e.stopPropagation();
+      // 2つのポップアップは同時に開かないよう制御する
       $userPopup.hide();
       $userBtn.attr('aria-expanded', 'false');
       var isOpen = $notifPopup.is(':visible');
@@ -101,9 +104,10 @@ $(function () {
       $(this).attr('aria-expanded', String(!isOpen));
     });
 
-    // アカウントポップアップ開閉
+    /* アカウントポップアップの開閉 */
     $userBtn.on('click', function (e) {
       e.stopPropagation();
+      // 2つのポップアップは同時に開かないよう制御する
       $notifPopup.hide();
       $notifBtn.attr('aria-expanded', 'false');
       var isOpen = $userPopup.is(':visible');
@@ -111,23 +115,28 @@ $(function () {
       $(this).attr('aria-expanded', String(!isOpen));
     });
 
-    // ログアウト
+    /* ログアウト */
     $userPopup.find('#js-nt-popup-logout').on('click', function () {
-      performLogout();
+      performLogout(); // common.js の共通ログアウト処理
     });
 
-    // 共通の閉じ処理などは既存通り...
+    /* ポップアップ外クリックで閉じる */
     $(document).on('click.nt-popup', function (e) {
       if (!$(e.target).closest($notifWrap).length) { $notifPopup.hide(); $notifBtn.attr('aria-expanded', 'false'); }
       if (!$(e.target).closest($userWrap).length) { $userPopup.hide(); $userBtn.attr('aria-expanded', 'false'); }
     });
   }
 
+  /**
+   * ヘッダーの通知ポップアップを最新の notifications データで更新する
+   * setupNotifPageHeader と fetchNotifications の両方から呼ばれる（どちらが先に完了するか不定のため）
+   */
   function updateHeaderNotifPopup() {
     var $popup = $('#js-nt-notif-popup');
     if (!$popup.length) return;
 
     var itemsHtml = '';
+    // ポップアップには最新5件のみ表示する
     $.each(notifications.slice(0, 5), function (i, n) {
       itemsHtml +=
         '<div class="notif-dropdown-item">' +
@@ -146,7 +155,14 @@ $(function () {
     );
   }
 
+  /**
+   * ヘッダーアカウントメニューの HTML を生成する
+   * @param {string} uid   - Kratos identity ID
+   * @param {string} email - ユーザーのメールアドレス
+   * @returns {string} HTML 文字列
+   */
   function buildHeaderUserMenuHtml(uid, email) {
+    // UID は長いため先頭8文字のみ表示する
     var shortUid  = uid ? uid.slice(0, 8) + '…' : '---';
     var safeEmail = escapeHtml(email || '---');
     return (
@@ -170,12 +186,17 @@ $(function () {
     );
   }
 
-  /* =====================================================
-     リスト描画
-     ===================================================== */
+  /* ===== リスト描画 ===== */
+  // $list, $empty は fetchNotifications のコールバック内でも参照されるが、
+  // var 宣言は巻き上げられるため非同期コールバックが実行される時点では初期化済みになっている
   var $list = $('#notif-list');
   var $empty = $('#notif-empty');
 
+  /**
+   * お知らせ行の HTML を生成する
+   * @param {Object} item - お知らせオブジェクト
+   * @returns {string} HTML 文字列
+   */
   function buildRow(item) {
     return (
       '<div class="notif-row" data-id="' + item.id + '" data-service="' + item.filterKey + '" role="button" tabindex="0">' +
@@ -192,10 +213,9 @@ $(function () {
     );
   }
 
-  function escapeHtml(str) {
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-
+  /**
+   * notifications データを元にリストを再描画する
+   */
   function renderRows() {
     if (notifications.length === 0) {
       $list.hide();
@@ -208,9 +228,8 @@ $(function () {
     $empty.hide();
   }
 
-  /* =====================================================
-     フィルター・モーダル等（基本ロジック維持）
-     ===================================================== */
+  /* ===== フィルタータブ ===== */
+
   $('#notif-filters').on('click', '.filter-tab', function () {
     var $tab = $(this);
     var filter = $tab.data('filter');
@@ -222,37 +241,53 @@ $(function () {
     if (filter === 'all') {
       $rows.show(); visibleCount = $rows.length;
     } else {
+      // data-service 属性が選択したフィルターキーに一致する行のみ表示する
       $rows.each(function () {
         if ($(this).data('service') === filter) { $(this).show(); visibleCount++; }
         else { $(this).hide(); }
       });
     }
+    // 表示件数が0件になった場合は空状態メッセージを表示する
     if (visibleCount === 0) { $list.hide(); $empty.show(); }
     else { $list.show(); $empty.hide(); }
   });
 
-  // モーダル
+  /* ===== 詳細モーダル ===== */
+
   var $overlay = $('#notif-modal-overlay');
+
+  /**
+   * ID からお知らせオブジェクトを検索する
+   * @param {number} id - お知らせID
+   * @returns {Object|undefined}
+   */
   function findById(id) {
     return notifications.find(function(n) { return n.id === id; });
   }
 
+  /**
+   * 詳細モーダルを開く
+   * @param {Object} item - お知らせオブジェクト
+   */
   function openModal(item) {
     $('#modal-service-badge').attr('class', 'badge ' + item.serviceClass).text(item.service);
     $('#modal-category-badge').attr('class', 'badge ' + item.categoryClass).text(item.category);
     $('#modal-date').text(item.date);
     $('#notif-modal-title').text(item.title);
+    // body は HTML を含む場合があるため innerHTML として挿入する
     $('#notif-modal-body').html(item.body);
     $overlay.addClass('is-open');
     $('body').addClass('modal-open');
   }
 
+  // リスト行クリックでモーダルを開く
   $list.on('click', '.notif-row', function () {
     var id = parseInt($(this).data('id'), 10);
     var item = findById(id);
     if (item) openModal(item);
   });
 
+  // モーダルを閉じる（× ボタンと「閉じる」ボタン）
   $('#notif-modal-close, #notif-modal-close-btn').on('click', function () {
     $overlay.removeClass('is-open');
     $('body').removeClass('modal-open');

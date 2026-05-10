@@ -1,14 +1,16 @@
 $(function () {
+  /* セッション情報と Kratos settings フローを保持する変数 */
   var session      = null;
   var settingsFlow = null;
   var csrfToken    = '';
 
-  // セッション取得・フォーム初期化
+  /* ===== セッション取得・フォーム初期化 ===== */
+  // セッションから現在のユーザー情報を取得し、フォームの初期値として反映する
   getSession()
     .done(function (data) {
       session = data;
       fillForm(data);
-      initSettingsFlow();
+      initSettingsFlow(); // フォーム値確定後に settings フローを取得する
     })
     .fail(function (xhr) {
       if (xhr.status !== 401) {
@@ -16,7 +18,11 @@ $(function () {
       }
     });
 
-  // フォームに現在の値をセット
+  /**
+   * フォームに現在の値をセット
+   * Kratos identity の traits を各フォームフィールドに反映する。
+   * @param {Object} data - getSession() のレスポンス
+   */
   function fillForm(data) {
     var identity = data.identity || {};
     var traits   = identity.traits || {};
@@ -24,11 +30,12 @@ $(function () {
 
     $('#current-email').val(traits.email || '');
 
-    // 名前が文字列の場合とオブジェクトの場合の両方に対応
+    // traits.name は文字列（旧スキーマ）とオブジェクト（新スキーマ）の両方がありうる
     var nameVal = '';
     if (typeof traits.name === 'string') {
       nameVal = traits.name;
     } else if (traits.name && typeof traits.name === 'object') {
+      // { last: "山田", first: "太郎" } 形式の場合は「姓 名」に結合する
       nameVal = ((traits.name.last || '') + ' ' + (traits.name.first || '')).trim();
     }
     $('#name').val(nameVal);
@@ -36,6 +43,7 @@ $(function () {
     $('input[name="account_type"][value="' + (traits.account_type || 'personal') + '"]').prop('checked', true);
     $('#phone').val(traits.phone || '');
 
+    // 住所フィールド
     $('#postal-code').val(address.postal_code || '');
     $('#prefecture').val(address.prefecture   || '');
     $('#city').val(address.city               || '');
@@ -43,38 +51,30 @@ $(function () {
     $('#building').val(address.building       || '');
   }
 
-  // Kratos settings フロー取得
+  /**
+   * Kratos settings フロー取得
+   * settings フロー ID と CSRF トークンを取得して保持する。
+   * フォームの POST 時にこれらが必要になる。
+   */
   function initSettingsFlow() {
     kratosApi({ method: 'GET', path: '/self-service/settings/browser' })
       .done(function (flow) {
         settingsFlow = flow;
-        csrfToken = '';
-        if (flow.ui && flow.ui.nodes) {
-          $.each(flow.ui.nodes, function (_, node) {
-            if (node.attributes && node.attributes.name === 'csrf_token') {
-              csrfToken = node.attributes.value;
-            }
-          });
-        }
+        csrfToken    = extractCsrfToken(flow); // ui.nodes から csrf_token を抽出
       })
       .fail(function (xhr) {
+        // 401 はセッション切れ → getSession() 側でリダイレクト済みなので二重処理しない
         if (xhr.status === 401) {
           window.location.href = '/auth/login/';
         }
       });
   }
 
-  // ===== タブ切り替え =====
+  /* ===== タブ切り替え ===== */
+  // common.js の initMpTabs() で .mp-tab / .mp-tab-panel の切り替えを初期化する
+  initMpTabs();
 
-  $(document).on('click', '.mp-tab', function () {
-    var tab = $(this).data('tab');
-    $('.mp-tab').removeClass('mp-tab--active').attr('aria-selected', 'false');
-    $(this).addClass('mp-tab--active').attr('aria-selected', 'true');
-    $('.mp-tab-panel').removeClass('mp-tab-panel--active');
-    $('.mp-tab-panel[data-panel="' + tab + '"]').addClass('mp-tab-panel--active');
-  });
-
-  // ===== メールアドレス変更 =====
+  /* ===== メールアドレス変更 ===== */
 
   $('#js-change-email-btn').on('click', function () {
     var $btn  = $(this);
@@ -100,6 +100,7 @@ $(function () {
 
     $btn.prop('disabled', true).text('送信中...');
 
+    // Kratos では traits 全体を送信する必要がある。現在の traits に新メールをマージする
     var currentTraits = (session && session.identity && session.identity.traits) ? session.identity.traits : {};
     var traits = $.extend(true, {}, currentTraits, { email: email });
 
@@ -109,9 +110,10 @@ $(function () {
       data: { method: 'profile', traits: traits, csrf_token: csrfToken }
     })
       .done(function () {
+        // メールアドレス変更は確認メールを送信するだけ（即時変更ではない）
         showToast('確認メールを送信しました。メールをご確認ください', 'success');
         $('#new-email').val('');
-        initSettingsFlow();
+        initSettingsFlow(); // CSRF トークンを更新する
       })
       .fail(function (xhr) {
         var msg = extractKratosErrorMessage(xhr, 'メールアドレスの変更に失敗しました。');
@@ -122,7 +124,7 @@ $(function () {
       });
   });
 
-  // ===== 基本情報保存 =====
+  /* ===== 基本情報保存 ===== */
 
   $('#js-profile-form').on('submit', function (e) {
     e.preventDefault();
@@ -138,8 +140,10 @@ $(function () {
     $btn.prop('disabled', true).text('保存中...');
 
     var currentTraits = (session && session.identity && session.identity.traits) ? session.identity.traits : {};
-    
-    // UIノードから許可されているtraitsのキーを取得
+
+    // Kratos identity schema で定義されているフィールドのみ送信可能。
+    // settingsFlow の ui.nodes から "traits.xxx" という名前のノードを収集して
+    // 送信可能フィールドを特定する（スキーマ外のフィールドは Kratos に弾かれる）
     var allowedKeys = [];
     if (settingsFlow && settingsFlow.ui && settingsFlow.ui.nodes) {
       $.each(settingsFlow.ui.nodes, function(_, node) {
@@ -149,13 +153,14 @@ $(function () {
       });
     }
 
-    // 許可された項目のみを抽出・マージ
+    // フォームから取得した新しい traits 候補
     var newTraits = {
       name: ($('#name').val() || '').trim(),
       phone: ($('#phone').val() || '').trim(),
       account_type: $('input[name="account_type"]:checked').val() || 'personal'
     };
 
+    // 現在の traits をベースに、allowedKeys に含まれる項目のみを上書きする
     var traits = $.extend(true, {}, currentTraits);
     $.each(newTraits, function(key, val) {
       if (allowedKeys.indexOf(key) !== -1) {
@@ -174,7 +179,7 @@ $(function () {
     })
       .done(function () {
         showToast('基本情報を保存しました', 'success');
-        initSettingsFlow();
+        initSettingsFlow(); // CSRF トークンを更新する
       })
       .fail(function (xhr) {
         var msg = extractKratosErrorMessage(xhr, '保存に失敗しました。');
@@ -185,7 +190,7 @@ $(function () {
       });
   });
 
-  // ===== 住所保存 =====
+  /* ===== 住所保存 ===== */
 
   $('#js-address-form').on('submit', function (e) {
     e.preventDefault();
@@ -201,8 +206,11 @@ $(function () {
     $btn.prop('disabled', true).text('保存中...');
 
     var currentTraits = (session && session.identity && session.identity.traits) ? session.identity.traits : {};
-    
-    // UIノードから許可されているtraitsのフルパス（traits.xxx）を取得
+
+    // 住所フィールドは Kratos スキーマによって以下の2通りの定義がある:
+    //   A) traits.address.postal_code, traits.address.city ... （ネスト）
+    //   B) traits.address                                     （オブジェクト全体）
+    // ui.nodes のフルパスを確認して対応する
     var allowedFullPaths = [];
     if (settingsFlow && settingsFlow.ui && settingsFlow.ui.nodes) {
       $.each(settingsFlow.ui.nodes, function(_, node) {
@@ -221,8 +229,8 @@ $(function () {
     };
 
     var traits = $.extend(true, {}, currentTraits);
-    
-    // addressオブジェクトの各項目が許可されているかチェック
+
+    // パターン A: traits.address.xxx が個別に許可されている場合
     var hasAddressSchema = false;
     $.each(addressTraits, function(key, val) {
       if (allowedFullPaths.indexOf('traits.address.' + key) !== -1) {
@@ -232,11 +240,12 @@ $(function () {
       }
     });
 
+    // パターン B: traits.address がオブジェクト全体として許可されている場合
     if (!hasAddressSchema) {
-      // address全体がひとつの項目として定義されている可能性も考慮
       if (allowedFullPaths.indexOf('traits.address') !== -1) {
         traits.address = addressTraits;
       } else {
+        // スキーマに住所フィールドが定義されていない場合は操作不可とする
         showToast('現在は住所情報の保存はサポートされていません', 'warning');
         $btn.prop('disabled', false).text('変更を保存する');
         return;
@@ -254,7 +263,7 @@ $(function () {
     })
       .done(function () {
         showToast('住所情報を保存しました', 'success');
-        initSettingsFlow();
+        initSettingsFlow(); // CSRF トークンを更新する
       })
       .fail(function (xhr) {
         var msg = extractKratosErrorMessage(xhr, '保存に失敗しました。');
@@ -265,10 +274,10 @@ $(function () {
       });
   });
 
-  // ===== 郵便番号から住所を自動入力 =====
-
+  /* ===== 郵便番号から住所を自動入力 ===== */
+  // zipcloud（https://zipcloud.ibsnet.co.jp）の無料 API を JSONP で利用する
   $('#js-autofill-address').on('click', function () {
-    var postal     = $('#postal-code').val().replace(/[^\d]/g, '');
+    var postal     = $('#postal-code').val().replace(/[^\d]/g, ''); // ハイフン等を除去して数字のみ抽出
     var $btn       = $(this);
     var $postalErr = $('#js-postal-error');
 
@@ -284,12 +293,13 @@ $(function () {
     $.ajax({
       url: 'https://zipcloud.ibsnet.co.jp/api/search',
       method: 'GET',
-      dataType: 'jsonp',
+      dataType: 'jsonp', // クロスオリジン対応のため JSONP を使用する
       data: { zipcode: postal }
     })
       .done(function (res) {
         if (res.status === 200 && res.results && res.results.length > 0) {
           var r = res.results[0];
+          // address1: 都道府県 / address2: 市区町村 / address3: 町域
           $('#prefecture').val(r.address1);
           $('#city').val(r.address2);
           $('#street').val(r.address3);
@@ -305,8 +315,8 @@ $(function () {
       });
   });
 
-  // ===== パスワード強度 =====
-
+  /* ===== パスワード強度インジケーター ===== */
+  // calcPasswordStrength() は 1〜4 を返す。levels 配列のインデックスにマッピングして表示する
   $('#new-password').on('input', function () {
     var pw    = $(this).val();
     var score = calcPasswordStrength(pw);
@@ -330,18 +340,8 @@ $(function () {
     $lbl.text('パスワードの強度: ' + level.text);
   });
 
-  function calcPasswordStrength(pw) {
-    var score = 0;
-    if (pw.length >= 8)  score++;
-    if (pw.length >= 12) score++;
-    if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) score++;
-    if (/\d/.test(pw))   score++;
-    if (/[^A-Za-z0-9]/.test(pw)) score++;
-    return Math.max(1, Math.min(4, Math.ceil(score / 1.25)));
-  }
-
-  // ===== パスワード表示トグル =====
-
+  /* ===== パスワード表示トグル ===== */
+  // data-target 属性でトグル対象の input ID を指定する汎用実装
   $(document).on('click', '.js-toggle-pw', function () {
     var targetId = $(this).data('target');
     var $input   = $('#' + targetId);
@@ -359,7 +359,7 @@ $(function () {
     }
   });
 
-  // ===== パスワード変更 =====
+  /* ===== パスワード変更 ===== */
 
   $('#js-password-form').on('submit', function (e) {
     e.preventDefault();
@@ -373,12 +373,14 @@ $(function () {
     $('#js-current-pw-error, #js-new-pw-error, #js-confirm-pw-error').hide();
     $formErr.hide();
 
+    // クライアント側バリデーション
     var hasError = false;
     if (!currentPw) {
       $('#js-current-pw-error').text('現在のパスワードを入力してください').show();
       hasError = true;
     }
     if (!newPw || newPw.length < 8) {
+      // Kratos の最低文字数要件と一致させる
       $('#js-new-pw-error').text('新しいパスワードは8文字以上で入力してください').show();
       hasError = true;
     }
@@ -395,6 +397,7 @@ $(function () {
 
     $btn.prop('disabled', true).text('変更中...');
 
+    // Kratos の password method は新しいパスワードのみを送信する（現在のパスワードは不要）
     kratosApi({
       method: 'POST',
       path: '/self-service/settings?flow=' + settingsFlow.id,
@@ -402,10 +405,11 @@ $(function () {
     })
       .done(function () {
         showToast('パスワードを変更しました', 'success');
+        // フォームと強度インジケーターをリセットする
         $('#current-password, #new-password, #confirm-password').val('');
         $('#js-pw-strength-bar').css({ width: '0%', background: 'var(--border)' });
         $('#js-pw-strength-label').text('');
-        initSettingsFlow();
+        initSettingsFlow(); // CSRF トークンを更新する
       })
       .fail(function (xhr) {
         var msg = extractKratosErrorMessage(xhr, 'パスワードの変更に失敗しました。');
@@ -416,10 +420,5 @@ $(function () {
       });
   });
 
-  // ===== ユーティリティ =====
-
-  function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
 
 });

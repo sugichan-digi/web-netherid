@@ -1,6 +1,10 @@
 $(function () {
 
-  // URLパラメータ: ?deactivated=1 の場合、お知らせバナーを表示
+  /* =====================================================
+     URLパラメータ処理
+     ===================================================== */
+
+  /* ?deactivated=1: 退会完了後のLPリダイレクトで表示するバナーを出す */
   (function () {
     var params = new URLSearchParams(window.location.search);
     if (params.get('deactivated') === '1') {
@@ -8,7 +12,11 @@ $(function () {
     }
   })();
 
-  // スムーススクロール（アンカーリンク）
+  /* =====================================================
+     スムーススクロール
+     ===================================================== */
+
+  /* ヘッダー固定分（72px）を引いてスクロール位置を調整する */
   $('a[href^="#"]').on('click', function (e) {
     var href = $(this).attr('href');
     if (href === '#') return;
@@ -19,17 +27,22 @@ $(function () {
     }
   });
 
-  // ハンバーガーメニュー
+  /* =====================================================
+     ハンバーガーメニュー（モバイル）
+     ===================================================== */
+
   var $btn     = $('#hamburger-btn');
   var $nav     = $('#mobile-nav');
   var $overlay = $('#mobile-nav-overlay');
 
+  /** ナビを開く: ボタン・ナビ・オーバーレイに active クラスを付与する */
   function openMenu() {
     $btn.addClass('open').attr('aria-expanded', 'true');
     $nav.addClass('active').attr('aria-hidden', 'false');
     $overlay.addClass('active');
   }
 
+  /** ナビを閉じる: active クラスをすべて除去する */
   function closeMenu() {
     $btn.removeClass('open').attr('aria-expanded', 'false');
     $nav.removeClass('active').attr('aria-hidden', 'true');
@@ -44,12 +57,21 @@ $(function () {
     }
   });
 
+  /* オーバーレイタップ・メニュー内リンクのクリックでも閉じる */
   $overlay.on('click', closeMenu);
-
   $nav.find('a').on('click', closeMenu);
 
-  // ----- ログイン状態確認・ヘッダー切り替え -----
+  /* =====================================================
+     ログイン状態確認・ヘッダー切り替え
+     ログイン済みの場合のみ通知ボタン・アカウントメニューをヘッダーに注入する。
+     未ログイン時はHTMLのデフォルト（ログイン/登録ボタン）をそのまま表示する。
+     ===================================================== */
 
+  /**
+   * LPヘッダー用お知らせデータ（表示専用・bodyフィールドなし）
+   * common.js の NOTIFICATIONS とは別に LP 専用のフォーマットで保持する。
+   * badgeCls はLPのCSSクラス体系（badge-service-xxx）に合わせてある。
+   */
   var LP_NOTIFICATIONS = [
     { badge: 'ネザーID',       badgeCls: 'badge-service-id',      date: '2026-05-09', title: '【重要】メンテナンスのお知らせ（5/15 2:00〜5:00）' },
     { badge: 'ネザーM&A',     badgeCls: 'badge-service-ma',      date: '2026-05-01', title: 'ネザーM&A — 売買契約書テンプレートをリニューアルしました' },
@@ -58,10 +80,10 @@ $(function () {
     { badge: 'ネザードメイン',  badgeCls: 'badge-service-domain',  date: '2026-04-15', title: 'ネザードメイン — .shop ドメインが特価キャンペーン中！' }
   ];
 
-  function escapeHtml(str) {
-    return $('<div>').text(String(str)).html();
-  }
-
+  /**
+   * 通知ポップアップのHTML文字列を生成する
+   * @returns {string} ポップアップ要素のHTML
+   */
   function buildNotifDropdownHtml() {
     var itemsHtml = '';
     $.each(LP_NOTIFICATIONS, function (i, n) {
@@ -83,6 +105,12 @@ $(function () {
     );
   }
 
+  /**
+   * アカウントメニューのHTML文字列を生成する
+   * @param {string} uid   - KratosのユーザーID（先頭8文字を表示する）
+   * @param {string} email - ユーザーのメールアドレス
+   * @returns {string} ポップアップ要素のHTML
+   */
   function buildUserMenuHtml(uid, email) {
     var shortUid  = uid ? uid.slice(0, 8) + '…' : '---';
     var safeEmail = escapeHtml(email || '---');
@@ -124,6 +152,12 @@ $(function () {
     );
   }
 
+  /**
+   * ログイン済みユーザー向けのヘッダーを構築してイベントを設定する
+   * セッション情報からUID・メールを取得してアカウントメニューに埋め込む。
+   * 通知・アカウント両ポップアップは排他制御し、外クリックとESCで閉じる。
+   * @param {Object} sessionData - getSessionSilent() の resolve 値
+   */
   function setupLoggedInHeader(sessionData) {
     var identity = sessionData.identity || {};
     var traits   = identity.traits || {};
@@ -133,7 +167,7 @@ $(function () {
     var $actions = $('.header-actions');
     $actions.empty();
 
-    // 通知ボタン
+    /* 通知ボタン＋ポップアップをラップして注入 */
     var $notifWrap = $('<div class="popup-wrap"></div>');
     var $notifBtn  = $(
       '<button class="header-icon-btn" id="js-lp-notif-btn" title="お知らせ" aria-expanded="false">' +
@@ -145,7 +179,7 @@ $(function () {
     var $notifPopup = $(buildNotifDropdownHtml());
     $notifWrap.append($notifBtn, $notifPopup);
 
-    // アカウントボタン
+    /* アカウントボタン＋ポップアップをラップして注入 */
     var $userWrap = $('<div class="popup-wrap"></div>');
     var $userBtn  = $(
       '<button class="header-icon-btn" id="js-lp-user-btn" title="アカウント" aria-expanded="false">' +
@@ -159,7 +193,7 @@ $(function () {
 
     $actions.append($notifWrap, $userWrap);
 
-    // 通知ポップアップ開閉
+    /* 通知ポップアップ: クリックで開閉、開く際にユーザーメニューを閉じる */
     $notifBtn.on('click', function (e) {
       e.stopPropagation();
       $userPopup.hide();
@@ -169,7 +203,7 @@ $(function () {
       $(this).attr('aria-expanded', String(!isOpen));
     });
 
-    // アカウントポップアップ開閉
+    /* アカウントポップアップ: クリックで開閉、開く際に通知ポップアップを閉じる */
     $userBtn.on('click', function (e) {
       e.stopPropagation();
       $notifPopup.hide();
@@ -179,17 +213,16 @@ $(function () {
       $(this).attr('aria-expanded', String(!isOpen));
     });
 
-    // 通知項目クリック → お知らせ一覧へ
+    /* 通知項目クリック → お知らせ一覧ページへ遷移 */
     $notifPopup.on('click', '.notif-dropdown-item', function () {
       window.location.href = '/notification/';
     });
 
-    // ログアウト
     $userPopup.find('#js-lp-popup-logout').on('click', function () {
       performLogout();
     });
 
-    // ポップアップ外クリックで閉じる
+    /* ポップアップ外クリックで閉じる（名前空間付きで登録し、ページ間の衝突を防ぐ） */
     $(document).on('click.lp-popup', function (e) {
       if (!$(e.target).closest($notifWrap).length) {
         $notifPopup.hide();
@@ -201,7 +234,7 @@ $(function () {
       }
     });
 
-    // ESCキーで閉じる
+    /* ESCキーで全ポップアップを閉じる */
     $(document).on('keydown.lp-popup', function (e) {
       if (e.key === 'Escape') {
         $notifPopup.hide();
@@ -212,10 +245,11 @@ $(function () {
     });
   }
 
+  /* セッションを取得し、ログイン済みならヘッダーを切り替える。
+     未ログインの場合は fail になるが、リダイレクトは行わずHTMLのデフォルト表示を維持する */
   getSessionSilent()
     .done(function (data) {
       setupLoggedInHeader(data);
     });
-    // 未ログイン時はデフォルトのログイン/登録ボタンをそのまま表示
 
 });

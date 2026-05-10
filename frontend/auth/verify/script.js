@@ -1,8 +1,11 @@
 $(function () {
+  /* Kratos 認証フローで使用するフローIDとCSRFトークンを保持 */
   var flowId = null;
   var csrfToken = '';
   var userEmail = '';
 
+  /* ===== URLパラメータ処理 ===== */
+  // 登録画面から email をクエリパラメータで受け取り、画面上に表示する
   var params = new URLSearchParams(window.location.search);
   userEmail = params.get('email') || '';
 
@@ -11,49 +14,29 @@ $(function () {
     $('#js-email-info').show();
   }
 
+  /* ===== 6桁コード入力UI初期化 ===== */
+  // initCodeInputs が返す { getCode, clearCode } オブジェクトを保持する
+  // - codeInput.getCode()    : 各セルの入力値を結合した文字列を返す
+  // - codeInput.clearCode()  : 全セルをクリアして最初のセルにフォーカスする
+  var codeInput = initCodeInputs('#js-code-inputs', '#js-verify-form');
+
   /**
    * Verificationフロー初期化
-   * flow.idとcsrf_tokenを取得・保持する
+   * Kratosからフロー情報を取得し、flow.idとcsrf_tokenを保持する。
    */
   function initFlow() {
     kratosApi({ method: 'GET', path: '/self-service/verification/browser' })
       .done(function (data) {
-        flowId = data.id;
-        csrfToken = '';
-        if (data.ui && data.ui.nodes) {
-          $.each(data.ui.nodes, function (_, node) {
-            if (node.attributes && node.attributes.name === 'csrf_token') {
-              csrfToken = node.attributes.value;
-            }
-          });
-        }
+        flowId    = data.id;
+        csrfToken = extractCsrfToken(data); // ui.nodes から csrf_token 属性ノードを抽出
       })
       .fail(function (xhr) {
+        // Kratos が別ページへのリダイレクトを要求する場合
         var redirect = xhr.getResponseHeader('Location') || (xhr.responseJSON && xhr.responseJSON.redirect_browser_to);
         if (redirect) {
           window.location.href = redirect;
         }
       });
-  }
-
-  /**
-   * コード入力欄の値を結合して返す
-   * @returns {string} 6桁の入力コード
-   */
-  function getCode() {
-    var digits = [];
-    $('#js-code-inputs .code-input').each(function () {
-      digits.push($(this).val());
-    });
-    return digits.join('');
-  }
-
-  /**
-   * コード入力欄をクリアして先頭にフォーカスを移す
-   */
-  function clearCode() {
-    $('#js-code-inputs .code-input').val('');
-    $('#js-code-inputs .code-input').first().trigger('focus');
   }
 
   /**
@@ -67,6 +50,7 @@ $(function () {
 
   /**
    * 成功アラート表示
+   * コード再送時の完了通知に使用する。
    * @param {string} message - 表示メッセージ
    */
   function showSuccess(message) {
@@ -76,6 +60,7 @@ $(function () {
 
   /**
    * 送信ボタンのローディング状態制御
+   * 二重送信を防ぐためボタンを無効化し、テキストを切り替える。
    * @param {boolean} loading - ローディング中かどうか
    */
   function setLoading(loading) {
@@ -87,62 +72,18 @@ $(function () {
     }
   }
 
-  /* ===== コード入力: 数字のみ許可・自動フォーカス移動 ===== */
-  $('#js-code-inputs').on('input', '.code-input', function () {
-    var $current = $(this);
-    var val = $current.val().replace(/[^0-9]/g, '');
-    $current.val(val.slice(-1));
-
-    if (val && $current.next('.code-input').length) {
-      $current.next('.code-input').trigger('focus');
-    }
-
-    if (getCode().length === 6) {
-      $('#js-verify-form').trigger('submit');
-    }
-  });
-
-  /* ===== コード入力: バックスペース・矢印キー操作 ===== */
-  $('#js-code-inputs').on('keydown', '.code-input', function (e) {
-    var $current = $(this);
-    if (e.key === 'Backspace' && !$current.val() && $current.prev('.code-input').length) {
-      $current.prev('.code-input').trigger('focus').val('');
-    }
-    if (e.key === 'ArrowLeft' && $current.prev('.code-input').length) {
-      $current.prev('.code-input').trigger('focus');
-    }
-    if (e.key === 'ArrowRight' && $current.next('.code-input').length) {
-      $current.next('.code-input').trigger('focus');
-    }
-  });
-
-  /* ===== コード入力: ペースト対応 ===== */
-  $('#js-code-inputs').on('paste', '.code-input', function (e) {
-    e.preventDefault();
-    var pasted = (e.originalEvent.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
-    var $inputs = $('#js-code-inputs .code-input');
-    pasted.split('').forEach(function (char, i) {
-      if (i < 6) $inputs.eq(i).val(char);
-    });
-    if (pasted.length >= 6) {
-      $inputs.last().trigger('focus');
-      $('#js-verify-form').trigger('submit');
-    } else {
-      $inputs.eq(pasted.length).trigger('focus');
-    }
-  });
-
   /* ===== フォーム送信 ===== */
   $('#js-verify-form').on('submit', function (e) {
     e.preventDefault();
     $('#js-code-error').hide().text('');
 
+    // initFlow() の非同期処理が完了していない状態での送信を防ぐ
     if (!flowId) {
       showError('認証フローが初期化されていません。ページを再読み込みしてください。');
       return;
     }
 
-    var code = getCode();
+    var code = codeInput.getCode();
     if (code.length !== 6) {
       $('#js-code-error').text('6桁のコードを入力してください').show();
       return;
@@ -161,19 +102,23 @@ $(function () {
       }
     })
       .done(function () {
+        // 認証成功 → マイページへ遷移
         window.location.href = '/mypage/';
       })
       .fail(function (xhr) {
         setLoading(false);
-        clearCode();
+        // 失敗時はコードをクリアして再入力させる
+        codeInput.clearCode();
 
         var res = xhr.responseJSON;
 
+        // Kratos が別ページへのリダイレクトを要求する場合
         if (res && res.redirect_browser_to) {
           window.location.href = res.redirect_browser_to;
           return;
         }
 
+        // フロー期限切れ: 再送ボタンで新しいコードを取得するよう促す
         if (xhr.status === 410) {
           showError('認証フローが期限切れです。コードを再送してください。');
           flowId = null;
@@ -189,22 +134,18 @@ $(function () {
   $('#js-resend').on('click', function () {
     var $btn = $(this);
     $btn.prop('disabled', true).text('送信中...');
+
+    // 再送時はフローを破棄して新規に取得する（新しい CSRF トークンも必要）
     flowId = null;
     csrfToken = '';
 
     kratosApi({ method: 'GET', path: '/self-service/verification/browser' })
       .done(function (data) {
-        flowId = data.id;
-        if (data.ui && data.ui.nodes) {
-          $.each(data.ui.nodes, function (_, node) {
-            if (node.attributes && node.attributes.name === 'csrf_token') {
-              csrfToken = node.attributes.value;
-            }
-          });
-        }
+        flowId    = data.id;
+        csrfToken = extractCsrfToken(data);
         showSuccess('認証コードを再送しました。メールをご確認ください。');
         $btn.prop('disabled', false).text('認証コードを再送する');
-        clearCode();
+        codeInput.clearCode();
       })
       .fail(function () {
         showError('再送に失敗しました。しばらくしてからお試しください。');

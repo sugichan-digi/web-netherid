@@ -1,6 +1,8 @@
 $(function () {
 
-  // セッション確認
+  /* ===== セッション確認 ===== */
+  // ログイン必須ページのため getSession() でセッションを確認する
+  // 401 の場合は getSession() 内でログインページへリダイレクト済みのためここでは無視する
   getSession()
     .fail(function (xhr) {
       if (xhr.status !== 401) {
@@ -8,21 +10,14 @@ $(function () {
       }
     });
 
-  // ===== タブ切り替え =====
-
-  $(document).on('click', '.mp-tab', function () {
-    var tab = $(this).data('tab');
-    $('.mp-tab').removeClass('mp-tab--active').attr('aria-selected', 'false');
-    $(this).addClass('mp-tab--active').attr('aria-selected', 'true');
-    $('.mp-tab-panel').removeClass('mp-tab-panel--active');
-    $('.mp-tab-panel[data-panel="' + tab + '"]').addClass('mp-tab-panel--active');
-
-    if (tab === 'list') {
-      fetchInquiryList();
-    }
+  /* ===== タブ切り替え ===== */
+  // common.js の initMpTabs() で「お問い合わせ」「履歴」タブの切り替えを初期化する
+  // 「履歴」タブに切り替わったタイミングで一覧を取得する（初回のみ）
+  initMpTabs(function (tab) {
+    if (tab === 'list') fetchInquiryList();
   });
 
-  // ===== お問い合わせ送信 =====
+  /* ===== お問い合わせ送信 ===== */
 
   $('#js-contact-form').on('submit', function (e) {
     e.preventDefault();
@@ -33,9 +28,11 @@ $(function () {
     var subject  = $('#contact-subject').val().trim();
     var body     = $('#contact-body').val().trim();
 
+    // エラー表示をリセットする
     $('#js-service-error, #js-subject-error, #js-body-error').hide();
     $formErr.hide();
 
+    // クライアント側バリデーション
     var hasError = false;
     if (!service) {
       $('#js-service-error').text('対象サービスを選択してください').show();
@@ -53,11 +50,12 @@ $(function () {
 
     $btn.prop('disabled', true).text('送信中...');
 
-    // セッションからメールアドレスを取得
+    // メールアドレスはフォームに持たせず、セッションから取得して送信する
+    // （ユーザーがフォームで別のアドレスを入力できないようにするため）
     getSessionSilent()
       .done(function(sessionData) {
         var email = (sessionData.identity && sessionData.identity.traits && sessionData.identity.traits.email) ? sessionData.identity.traits.email : '';
-        
+
         if (!email) {
           showToast('メールアドレスが取得できません。ログインし直してください', 'error');
           $btn.prop('disabled', false).text('送信する');
@@ -87,7 +85,7 @@ $(function () {
       });
   });
 
-  // ===== お問い合わせ一覧取得 =====
+  /* ===== お問い合わせ一覧取得 ===== */
 
   function fetchInquiryList() {
     var $wrap = $('#js-contact-list-wrap');
@@ -115,10 +113,11 @@ $(function () {
         var $tbody = $table.find('tbody');
 
         $.each(list, function (i, item) {
+          // created_at は ISO 8601 形式（例: "2024-05-01T12:00:00Z"）で返ってくる
           var date = item.created_at ? item.created_at.split('T')[0].replace(/-/g, '/') : '---';
           var statusText = (item.status === 'open') ? '受付中' : (item.status === 'closed' ? '完了' : item.status);
           var statusClass = 'status-' + item.status;
-          
+
           var $tr = $(
             '<tr>' +
               '<td class="col-date">' + date + '</td>' +
@@ -137,25 +136,28 @@ $(function () {
       });
   }
 
+  /**
+   * サービスキーを表示名に変換
+   * バックエンドが返す type キーをユーザー向けの日本語名称に変換する。
+   * @param {string} key - サービスキー（例: 'nether-id'）
+   * @returns {string} 表示名（例: 'ネザーID'）
+   */
   function getServiceName(key) {
     var services = {
-      'nether-id': 'ネザーID',
-      'nether-ma': 'ネザーM&A',
-      'nether-site-market': 'ネザーサイトマーケット',
-      'nether-keyword': 'ネザーキーワード',
-      'nether-server': 'ネザーサーバー',
-      'nether-domain': 'ネザードメイン',
+      'nether-id':            'ネザーID',
+      'nether-ma':            'ネザーM&A',
+      'nether-site-market':   'ネザーサイトマーケット',
+      'nether-keyword':       'ネザーキーワード',
+      'nether-server':        'ネザーサーバー',
+      'nether-domain':        'ネザードメイン',
       'nether-domain-market': 'ネザードメインマーケット',
-      'cd-domain': '中古ドメイン販売屋さん',
-      'nether-affiliate': 'ネザーIDアフィリエイト',
-      'nether-tools': 'ネザーツールズ',
-      'other': 'その他'
+      'cd-domain':            '中古ドメイン販売屋さん',
+      'nether-affiliate':     'ネザーIDアフィリエイト',
+      'nether-tools':         'ネザーツールズ',
+      'other':                'その他'
     };
     return services[key] || key;
   }
 
-  function escapeHtml(str) {
-    return $('<div>').text(String(str)).html();
-  }
 
 });
