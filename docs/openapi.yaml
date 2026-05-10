@@ -10,10 +10,50 @@ servers:
     description: Local Development Server
 
 paths:
-  /dashboard/init:
+  /notifications:
     get:
-      summary: ダッシュボード初期情報取得
-      description: マイページに必要な「お知らせ」と「サービス連携状況」を一括取得します。KratosセッションCookieが必須です。
+      summary: お知らせ一覧取得
+      description: 公開済みのお知らせ情報を一覧で取得します。未ログインでも取得可能です。
+      security:
+        - cookieAuth: []
+        - {}
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notifications:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Notification'
+
+  /services:
+    get:
+      summary: サービス一覧取得
+      description: 提供中のサービス一覧を取得します。ログイン済みの場合、各サービスへの連携状況（is_linked / linked_at）が付与されます。未ログイン時は is_linked が常に false になります。
+      security:
+        - cookieAuth: []
+        - {}
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  services:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Service'
+
+  /inquiries:
+    get:
+      summary: お問い合わせ履歴取得
+      description: ログインユーザー自身のお問い合わせ履歴を取得します。KratosセッションCookieが必須です。
       security:
         - cookieAuth: []
       responses:
@@ -24,77 +64,18 @@ paths:
               schema:
                 type: object
                 properties:
-                  user:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 1
-                      kratos_identity_id:
-                        type: string
-                        format: uuid
-                        example: 123e4567-e89b-12d3-a456-426614174000
-                  notifications:
+                  inquiries:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          example: 1
-                        title:
-                          type: string
-                          example: NetherIDをリリースしました
-                        content:
-                          type: string
-                          example: 共通ID管理プラットフォーム「NetherID」のベータ版提供を開始しました。
-                        url:
-                          type: string
-                          nullable: true
-                          example: null
-                        published_at:
-                          type: string
-                          format: date-time
-                          example: "2026-05-08T12:00:00Z"
-                  services:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: subscr_optimizer
-                        name:
-                          type: string
-                          example: サブスク管理人
-                        description:
-                          type: string
-                          example: サブスクリプションを一元管理し、無駄な支出を最適化するツール。
-                        sso_url:
-                          type: string
-                          format: uri
-                          example: https://subscr-optimizer.example.com/auth/sso
-                        icon_url:
-                          type: string
-                          example: /assets/icons/subscr_optimizer.svg
-                        is_active:
-                          type: boolean
-                          example: true
-                        is_linked:
-                          type: boolean
-                          example: true
-                        linked_at:
-                          type: string
-                          format: date-time
-                          nullable: true
-                          example: "2026-05-09T10:00:00Z"
+                      $ref: '#/components/schemas/Inquiry'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
-  /inquiries:
     post:
       summary: お問い合わせ送信
-      description: ダッシュボードやパブリックページからの問い合わせ内容を送信します。未ログインの場合はuser_idなしとして登録されます。
+      description: お問い合わせ内容を送信します。KratosセッションCookieが必須です。
+      security:
+        - cookieAuth: []
       requestBody:
         required: true
         content:
@@ -113,10 +94,12 @@ paths:
                   example: user@example.com
                 type:
                   type: string
+                  maxLength: 50
                   example: account
                   description: "お問い合わせ種別 (例: account, payment, other)"
                 subject:
                   type: string
+                  maxLength: 255
                   example: パスワードを忘れました
                 body:
                   type: string
@@ -135,8 +118,40 @@ paths:
                   inquiry_id:
                     type: integer
                     example: 1
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
         '422':
           $ref: '#/components/responses/ValidationError'
+
+  /account/deactivate:
+    delete:
+      summary: アカウント退会
+      description: ログインユーザーのアカウントを無効化します。KratosのidentityのstateをinactiveにしてDBのdeactivated_atを記録します。KratosセッションCookieが必須です。
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: 退会処理成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 退会処理が完了しました。
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          description: Kratosとの通信エラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Kratos Identity ID not found
 
 components:
   securitySchemes:
@@ -145,6 +160,99 @@ components:
       in: cookie
       name: ory_kratos_session
       description: Kratosから発行されたセッションCookie
+
+  schemas:
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: NetherIDをリリースしました
+        content:
+          type: string
+          example: 共通ID管理プラットフォーム「NetherID」のベータ版提供を開始しました。
+        url:
+          type: string
+          nullable: true
+          example: null
+        published_at:
+          type: string
+          format: date-time
+          example: "2026-05-08T12:00:00Z"
+
+    Service:
+      type: object
+      properties:
+        id:
+          type: string
+          example: subscr_optimizer
+        name:
+          type: string
+          example: サブスク管理人
+        description:
+          type: string
+          example: サブスクリプションを一元管理し、無駄な支出を最適化するツール。
+        sso_url:
+          type: string
+          format: uri
+          example: https://subscr-optimizer.example.com/auth/sso
+        icon_url:
+          type: string
+          example: /assets/icons/subscr_optimizer.svg
+        is_active:
+          type: boolean
+          example: true
+        is_linked:
+          type: boolean
+          example: true
+          description: 未ログイン時は常にfalse
+        linked_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2026-05-09T10:00:00Z"
+          description: 未連携または未ログイン時はnull
+
+    Inquiry:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        type:
+          type: string
+          example: account
+        subject:
+          type: string
+          example: パスワードを忘れました
+        body:
+          type: string
+          example: リカバリコードも紛失してしまったため、リセットをお願いします。
+        status:
+          type: string
+          enum:
+            - open
+            - closed
+          example: open
+        created_at:
+          type: string
+          format: date-time
+          example: "2026-05-08T12:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2026-05-08T12:00:00Z"
+
   responses:
     UnauthorizedError:
       description: 認証エラー (未ログインまたはセッション無効)

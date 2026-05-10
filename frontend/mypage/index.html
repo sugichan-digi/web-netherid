@@ -16,6 +16,7 @@
         ("00" + n.getMinutes()).slice(-2) +
         ("00" + n.getSeconds()).slice(-2);
       document.write('<link rel="stylesheet" href="/design-system/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/common.css?v=' + v + '">');
       document.write('<link rel="stylesheet" href="/mypage/style.css?v=' + v + '">');
       document.write('<script src="/common.js?v=' + v + '"><\/script>');
       document.write('<script src="/mypage/script.js?v=' + v + '"><\/script>');
@@ -145,7 +146,7 @@
         <div class="mp-welcome-bubble">
           <p class="mp-welcome-text">
             ようこそ、<strong id="js-username">---</strong> さん！<br>
-            ネザーIDでは各サービスで利用するユーザー情報や、決済情報を一元管理しています。<br>
+            ネザーIDでは各サービスで利用するユーザー情報を一元管理しています。<br>
             ユーザー情報の変更は「マイページ」メニューから、各サービスのご利用はサービスサイトからどうぞ。
           </p>
         </div>
@@ -154,80 +155,8 @@
       <!-- ご利用可能サービス一覧 -->
       <section class="mp-section">
         <h3 class="mp-section-title">ご利用可能サービス一覧</h3>
-        <ul class="mp-services-grid">
-
-          <li class="mp-service-card">
-            <div class="mp-service-icon" style="background:#059669;">M&amp;A</div>
-            <div class="mp-service-body">
-              <div class="mp-service-name">ネザーM&amp;A</div>
-              <p class="mp-service-desc">安心の無料弁護士相談、売買契約書のひな型提供、電子契約、入金確認の自動化など、サイト売買にまつわる業務の煩雑さを解消するサービスが充実。</p>
-            </div>
-          </li>
-
-          <li class="mp-service-card">
-            <div class="mp-service-icon" style="background:#0891b2;">SM</div>
-            <div class="mp-service-body">
-              <div class="mp-service-name">ネザーサイトマーケット</div>
-              <p class="mp-service-desc">WordPressサイトをかんたん売買！小規模WEBメディアを即時で購入・売却できる、リアルタイムサイト売買プラットフォームです。</p>
-            </div>
-          </li>
-
-          <li class="mp-service-card">
-            <div class="mp-service-icon" style="background:#7c3aed;">KW</div>
-            <div class="mp-service-body">
-              <div class="mp-service-name">ネザーキーワード</div>
-              <p class="mp-service-desc">無料のキーワードリサーチツール！キーワード入力から1秒でサジェストキーワードや、関連するQ&Aを一覧表示します。</p>
-            </div>
-          </li>
-
-          <li class="mp-service-card">
-            <div class="mp-service-icon" style="background:#dc2626;">SV</div>
-            <div class="mp-service-body">
-              <div class="mp-service-name">ネザーサーバー</div>
-              <p class="mp-service-desc">ブログ初心者からハイエンドな法人利用まで、手軽にサクサク使える高速レンタルサーバー！5分でブログが始められます。</p>
-            </div>
-          </li>
-
-          <li class="mp-service-card">
-            <div class="mp-service-icon" style="background:#d97706;">DM</div>
-            <div class="mp-service-body">
-              <div class="mp-service-name">ネザードメイン</div>
-              <p class="mp-service-desc">好きな名前のURLやメールアドレスが作れる！.com .net .jpなどの独自ドメインの登録がすぐに行えます。</p>
-            </div>
-          </li>
-
-          <li class="mp-service-card">
-            <div class="mp-service-icon" style="background:#0284c7;">MK</div>
-            <div class="mp-service-body">
-              <div class="mp-service-name">ネザードメインマーケット</div>
-              <p class="mp-service-desc">ドメイン名を100円から売買できる！不要になったドメイン名をかんたんに売りに出したり、SEO価値の高いドメインを購入できます。</p>
-            </div>
-          </li>
-
-          <li class="mp-service-card">
-            <div class="mp-service-icon" style="background:#65a30d;">CD</div>
-            <div class="mp-service-body">
-              <div class="mp-service-name">中古ドメイン販売屋さん</div>
-              <p class="mp-service-desc">SEOに有利なオールドドメインに特化した販売サイト。2009年から運営されており、高品質なドメインを提供し続けています。</p>
-            </div>
-          </li>
-
-          <li class="mp-service-card">
-            <div class="mp-service-icon" style="background:#db2777;">AF</div>
-            <div class="mp-service-body">
-              <div class="mp-service-name">ネザーIDアフィリエイト</div>
-              <p class="mp-service-desc">ネザーWEBサービス専用のアフィリエイト。ネザーIDで使えるWEBサービスを紹介することで報酬を得ることができます。</p>
-            </div>
-          </li>
-
-          <li class="mp-service-card">
-            <div class="mp-service-icon" style="background:#4f46e5;">TL</div>
-            <div class="mp-service-body">
-              <div class="mp-service-name">ネザーツールズ</div>
-              <p class="mp-service-desc">ちょっと便利な無料のWEBツールを提供。「ユーザー登録なし」「直感的に使える」「サクサク動く」WEB制作系ツールを中心に展開。</p>
-            </div>
-          </li>
-
+        <ul class="mp-services-grid" id="js-services-grid">
+          <!-- script.js で描画 -->
         </ul>
       </section>
 
@@ -239,12 +168,8 @@
         <div class="mp-notif-tabs-wrap">
           <div class="mp-notif-tabs" role="tablist">
             <button class="mp-notif-tab mp-notif-tab--active" data-filter="all" role="tab">全て</button>
-            <button class="mp-notif-tab" data-filter="nether-id" role="tab">ネザーID</button>
-            <button class="mp-notif-tab" data-filter="nether-ma" role="tab">ネザーM&amp;A</button>
-            <button class="mp-notif-tab" data-filter="nether-keyword" role="tab">ネザーキーワード</button>
-            <button class="mp-notif-tab" data-filter="nether-server" role="tab">ネザーサーバー</button>
-            <button class="mp-notif-tab" data-filter="nether-domain" role="tab">ネザードメイン</button>
-            <button class="mp-notif-tab" data-filter="cd-domain" role="tab">中古ドメイン販売屋さん</button>
+            <button class="mp-notif-tab" data-filter="subsuku" role="tab">サブスク管理人</button>
+            <button class="mp-notif-tab" data-filter="lunchmap" role="tab">ランチマップ</button>
           </div>
           <!-- 通知リスト -->
           <div class="mp-notif-list" id="js-notif-list">

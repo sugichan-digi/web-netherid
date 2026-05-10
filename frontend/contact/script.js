@@ -144,17 +144,10 @@ $(function () {
    */
   function getServiceName(key) {
     var services = {
-      'nether-id':            'ネザーID',
-      'nether-ma':            'ネザーM&A',
-      'nether-site-market':   'ネザーサイトマーケット',
-      'nether-keyword':       'ネザーキーワード',
-      'nether-server':        'ネザーサーバー',
-      'nether-domain':        'ネザードメイン',
-      'nether-domain-market': 'ネザードメインマーケット',
-      'cd-domain':            '中古ドメイン販売屋さん',
-      'nether-affiliate':     'ネザーIDアフィリエイト',
-      'nether-tools':         'ネザーツールズ',
-      'other':                'その他'
+      'nether-id': 'ネザーID',
+      'subsuku':   'サブスク管理人',
+      'lunchmap':  'ランチマップ',
+      'other':     'その他'
     };
     return services[key] || key;
   }

@@ -62,31 +62,138 @@ $(function () {
   $nav.find('a').on('click', closeMenu);
 
   /* =====================================================
+     LP コンテンツ（お知らせ・サービス）をAPIから取得して描画
+     =====================================================
+     両エンドポイントは kratos.optional ミドルウェアで保護されており、
+     未ログインでもアクセス可能。ログイン済みの場合は連携状態も返す。
+     ===================================================== */
+
+  /* サービスIDとバナー背景色の対応表 */
+  var SERVICE_BANNER_COLORS = {
+    subscr_optimizer: '#2563eb',
+    lunchmap:         '#ea580c'
+  };
+
+  /* お知らせキャッシュ（本文欄とヘッダーポップアップで共用する） */
+  var _lpNotifications = [];
+
+  /**
+   * APIからお知らせを取得し、本文セクションとヘッダーポップアップを更新する
+   */
+  function fetchLpNotifications() {
+    api({ method: 'GET', path: '/notifications' })
+      .done(function (data) {
+        _lpNotifications = (data.notifications || []).map(function (n) {
+          return {
+            date:     n.published_at ? n.published_at.split(' ')[0] : '',
+            badge:    'ネザーID',
+            badgeCls: 'badge-service-id',
+            title:    n.title
+          };
+        });
+        renderLpNews(_lpNotifications);
+        // ヘッダーポップアップが既に生成済みの場合は即時更新する
+        updateNotifDropdown();
+      })
+      .fail(function () {
+        $('#lp-news-list').html('<p class="lp-news-empty">お知らせの取得に失敗しました。</p>');
+      });
+  }
+
+  /**
+   * お知らせリストを描画する（最新5件）
+   * @param {Array} items - お知らせオブジェクトの配列
+   */
+  function renderLpNews(items) {
+    var $list = $('#lp-news-list');
+    if (!$list.length) return;
+    if (items.length === 0) {
+      $list.html('<p class="lp-news-empty">現在お知らせはありません。</p>');
+      return;
+    }
+    var html = '';
+    $.each(items.slice(0, 5), function (i, n) {
+      html +=
+        '<a href="/notification/" class="lp-news-item">' +
+          '<span class="lp-news-date">' + escapeHtml(n.date) + '</span>' +
+          '<span class="lp-news-category"><span class="badge ' + escapeHtml(n.badgeCls) + '">' + escapeHtml(n.badge) + '</span></span>' +
+          '<span class="lp-news-text">' + escapeHtml(n.title) + '</span>' +
+        '</a>';
+    });
+    $list.html(html);
+  }
+
+  /**
+   * APIからサービス一覧を取得してグリッドを描画する
+   */
+  function fetchLpServices() {
+    api({ method: 'GET', path: '/services' })
+      .done(function (data) {
+        renderLpServices(data.services || []);
+      })
+      .fail(function () {
+        $('#lp-services-grid').html('<p class="lp-service-error">サービス情報の取得に失敗しました。</p>');
+      });
+  }
+
+  /**
+   * サービスカードグリッドを描画する
+   * @param {Array} services - サービスオブジェクトの配列
+   */
+  function renderLpServices(services) {
+    var $grid = $('#lp-services-grid');
+    if (!$grid.length) return;
+    if (services.length === 0) {
+      $grid.html('<p class="lp-service-error">現在ご利用可能なサービスはありません。</p>');
+      return;
+    }
+    var html = '';
+    $.each(services, function (i, svc) {
+      var isActive    = svc.is_active;
+      var grayClass   = isActive ? '' : ' card--grayout';
+      var grayBadge   = isActive ? '' : '<div class="grayout-badge">開発中</div>';
+      var bannerColor = SERVICE_BANNER_COLORS[svc.id] || '#6b7280';
+      var bannerContent = svc.icon_url
+        ? '<img src="' + escapeHtml(svc.icon_url) + '" alt="" class="lp-service-banner-img">'
+        : '<span class="lp-service-banner-label">' + escapeHtml(svc.name.slice(0, 2)) + '</span>';
+      var inner =
+        grayBadge +
+        '<div class="lp-service-banner" style="background:' + escapeHtml(bannerColor) + ';">' +
+          bannerContent +
+        '</div>' +
+        '<div class="lp-service-body">' +
+          '<div class="lp-service-name">' + escapeHtml(svc.name) + '</div>' +
+          '<div class="lp-service-desc">' + escapeHtml(svc.description || '') + '</div>' +
+        '</div>';
+
+      if (svc.sso_url && isActive) {
+        html += '<a href="' + escapeHtml(svc.sso_url) + '" class="lp-service-card' + grayClass + '">' + inner + '</a>';
+      } else {
+        html += '<div class="lp-service-card' + grayClass + '" style="cursor:default;">' + inner + '</div>';
+      }
+    });
+    $grid.html(html);
+  }
+
+  /* ページロード時にお知らせとサービスを取得する */
+  fetchLpNotifications();
+  fetchLpServices();
+
+  /* =====================================================
      ログイン状態確認・ヘッダー切り替え
      ログイン済みの場合のみ通知ボタン・アカウントメニューをヘッダーに注入する。
      未ログイン時はHTMLのデフォルト（ログイン/登録ボタン）をそのまま表示する。
      ===================================================== */
 
   /**
-   * LPヘッダー用お知らせデータ（表示専用・bodyフィールドなし）
-   * common.js の NOTIFICATIONS とは別に LP 専用のフォーマットで保持する。
-   * badgeCls はLPのCSSクラス体系（badge-service-xxx）に合わせてある。
+   * ヘッダー通知ポップアップを最新の _lpNotifications で更新する
+   * fetchLpNotifications と setupLoggedInHeader の両方から呼ばれる（どちらが先に完了するか不定のため）
    */
-  var LP_NOTIFICATIONS = [
-    { badge: 'ネザーID',       badgeCls: 'badge-service-id',      date: '2026-05-09', title: '【重要】メンテナンスのお知らせ（5/15 2:00〜5:00）' },
-    { badge: 'ネザーM&A',     badgeCls: 'badge-service-ma',      date: '2026-05-01', title: 'ネザーM&A — 売買契約書テンプレートをリニューアルしました' },
-    { badge: 'ネザーキーワード', badgeCls: 'badge-service-keyword', date: '2026-04-25', title: 'ネザーキーワード — サジェスト件数が最大500件に拡張されました' },
-    { badge: 'ネザーサーバー',  badgeCls: 'badge-service-server',  date: '2026-04-20', title: 'ネザーサーバー — PHP 8.4 対応完了のお知らせ' },
-    { badge: 'ネザードメイン',  badgeCls: 'badge-service-domain',  date: '2026-04-15', title: 'ネザードメイン — .shop ドメインが特価キャンペーン中！' }
-  ];
-
-  /**
-   * 通知ポップアップのHTML文字列を生成する
-   * @returns {string} ポップアップ要素のHTML
-   */
-  function buildNotifDropdownHtml() {
+  function updateNotifDropdown() {
+    var $popup = $('#js-lp-notif-popup');
+    if (!$popup.length) return;
     var itemsHtml = '';
-    $.each(LP_NOTIFICATIONS, function (i, n) {
+    $.each(_lpNotifications.slice(0, 5), function (i, n) {
       itemsHtml +=
         '<div class="notif-dropdown-item">' +
           '<div class="notif-dropdown-meta">' +
@@ -96,10 +203,22 @@ $(function () {
           '<div class="notif-dropdown-title">' + escapeHtml(n.title) + '</div>' +
         '</div>';
     });
+    $popup.html(
+      '<div class="notif-dropdown-header">お知らせ</div>' +
+      (itemsHtml || '<div class="notif-dropdown-empty">お知らせはありません</div>') +
+      '<div class="notif-dropdown-footer"><a href="/notification/">全て表示</a></div>'
+    );
+  }
+
+  /**
+   * 通知ポップアップの初期HTML文字列を生成する（データは updateNotifDropdown() で後から注入）
+   * @returns {string} ポップアップ要素のHTML
+   */
+  function buildNotifDropdownHtml() {
     return (
       '<div id="js-lp-notif-popup" class="popup-dropdown notif-dropdown" style="display:none;" role="dialog" aria-label="お知らせ">' +
         '<div class="notif-dropdown-header">お知らせ</div>' +
-        itemsHtml +
+        '<div class="notif-dropdown-empty">読み込み中...</div>' +
         '<div class="notif-dropdown-footer"><a href="/notification/">全て表示</a></div>' +
       '</div>'
     );
@@ -192,6 +311,9 @@ $(function () {
     $userWrap.append($userBtn, $userPopup);
 
     $actions.append($notifWrap, $userWrap);
+
+    /* ポップアップ生成直後に通知データで更新する（データ取得済みの場合のみ反映される） */
+    updateNotifDropdown();
 
     /* 通知ポップアップ: クリックで開閉、開く際にユーザーメニューを閉じる */
     $notifBtn.on('click', function (e) {

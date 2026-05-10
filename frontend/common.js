@@ -11,24 +11,6 @@ var KRATOS_BASE = PROTOCOL + '//kratos.netherid-frontend.test:4433';
 /** バックエンド API の接続先ベースURL */
 var API_BASE    = PROTOCOL + '//netherid-frontend.test:8000';
 
-/**
- * お知らせデータ（API 実装前の仮データ）
- * 各ページで共通参照する。API 実装後はこの配列を削除して差し替える。
- * - filterKey: タブフィルター用のサービスキー
- * - badgeClass: バッジの CSS クラス名
- */
-var NOTIFICATIONS = [
-  { date: '2026-05-09', filterKey: 'nether-id',      badgeClass: 'mp-notif-badge-id', badge: 'ネザーID',      title: '【重要】メンテナンスのお知らせ（5/15 2:00〜5:00）',                  body: 'いつもネザーIDをご利用いただきありがとうございます。システムメンテナンスのため、2026年5月15日（金）午前2:00〜5:00の間サービスを一時停止します。' },
-  { date: '2026-05-01', filterKey: 'nether-ma',      badgeClass: 'mp-notif-badge-ma', badge: 'ネザーM&A',     title: 'ネザーM&A — 売買契約書テンプレートをリニューアルしました',              body: '売買契約書のひな型を全面リニューアルしました。新テンプレートはマイページのM&Aセクションからダウンロードいただけます。' },
-  { date: '2026-04-25', filterKey: 'nether-keyword', badgeClass: 'mp-notif-badge-kw', badge: 'ネザーキーワード', title: 'ネザーキーワード — サジェスト件数が最大500件に拡張されました',        body: 'キーワードリサーチの精度向上のため、サジェスト最大件数を200件から500件に拡張しました。' },
-  { date: '2026-04-20', filterKey: 'nether-server',  badgeClass: 'mp-notif-badge-sv', badge: 'ネザーサーバー', title: 'ネザーサーバー — PHP 8.4 対応完了のお知らせ',                        body: 'ネザーサーバー全プランにてPHP 8.4が利用可能になりました。コントロールパネルよりPHPバージョンを変更できます。' },
-  { date: '2026-04-15', filterKey: 'nether-domain',  badgeClass: 'mp-notif-badge-dm', badge: 'ネザードメイン', title: 'ネザードメイン — .shop ドメインが特価キャンペーン中！',               body: '.shopドメインが通常価格より70%オフの特価でご提供中です。キャンペーンは2026年4月30日まで。' },
-  { date: '2026-04-10', filterKey: 'nether-id',      badgeClass: 'mp-notif-badge-id', badge: 'ネザーID',      title: 'ネザーID — パスキー（Passkey）ログインに対応しました',               body: 'パスキーを使ったパスワードレスログインが利用可能になりました。セキュリティ設定ページよりご登録いただけます。' },
-  { date: '2026-04-01', filterKey: 'cd-domain',      badgeClass: 'mp-notif-badge-cd', badge: '中古ドメイン',   title: '中古ドメイン販売屋さん — 新着高品質ドメイン200件を追加しました',        body: 'DA 40以上の高品質オールドドメインを200件追加しました。ぜひドメイン一覧よりご確認ください。' },
-  { date: '2026-03-28', filterKey: 'nether-ma',      badgeClass: 'mp-notif-badge-ma', badge: 'ネザーM&A',     title: 'ネザーM&A — 無料弁護士相談サービスの提供開始',                         body: '売買成立後のトラブルに備え、弁護士への無料相談サービスの提供を開始しました。' },
-  { date: '2026-03-20', filterKey: 'nether-id',      badgeClass: 'mp-notif-badge-id', badge: 'ネザーID',      title: 'ネザーID — プライバシーポリシーを改定しました（2026/4/1 施行）',        body: '2026年4月1日よりプライバシーポリシーを改定します。主な変更点は本文をご確認ください。' },
-  { date: '2026-03-10', filterKey: 'nether-server',  badgeClass: 'mp-notif-badge-sv', badge: 'ネザーサーバー', title: 'ネザーサーバー — 無料 SSL 証明書の自動更新に対応しました',              body: 'Let\'s Encrypt による SSL 証明書の自動更新機能を全プランに追加しました。手動更新は不要になります。' },
-];
 
 /* =====================================================
    ユーティリティ（汎用）
@@ -467,11 +449,29 @@ function initHeaderPopups() {
       $('#js-popup-email').text(email || '---');
     });
 
+  /* お知らせをAPIから取得してキャッシュする */
+  var _notifCache = [];
+  api({ method: 'GET', path: '/notifications' })
+    .done(function (data) {
+      _notifCache = (data.notifications || []).map(function (n) {
+        return {
+          date:      n.published_at ? n.published_at.split(' ')[0] : '',
+          badge:     'ネザーID',
+          badgeClass: 'badge-service-id',
+          title:     n.title
+        };
+      });
+    });
+
   /** 通知ポップアップに最新5件をレンダリングする */
   function renderNotifPopup() {
     var $list = $('#js-notif-popup-list');
     $list.empty();
-    var items = NOTIFICATIONS.slice(0, 5);
+    var items = _notifCache.slice(0, 5);
+    if (items.length === 0) {
+      $list.html('<div class="notif-dropdown-empty">お知らせはありません</div>');
+      return;
+    }
     $.each(items, function (i, item) {
       var $item = $(
         '<div class="notif-dropdown-item">' +

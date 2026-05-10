@@ -15,6 +15,7 @@
         ("00" + n.getMinutes()).slice(-2) +
         ("00" + n.getSeconds()).slice(-2);
       document.write('<link rel="stylesheet" href="/design-system/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/common.css?v=' + v + '">');
       document.write('<link rel="stylesheet" href="/auth/login/style.css?v=' + v + '">');
       document.write('<script src="/common.js?v=' + v + '"><\/script>');
       document.write('<script src="/auth/login/script.js?v=' + v + '"><\/script>');
@@ -105,18 +106,6 @@
           </button>
 
         </form>
-<!-- 
-        <div class="auth-divider" style="margin-top:24px;">
-          <span>サポート</span>
-        </div>
-
-        <p style="font-size:13px;color:var(--text-muted);text-align:center;margin-bottom:16px;">
-          わからないことは「マニュアル・よくある質問」ですぐ解決するかも
-        </p>
-        <div style="display:flex;gap:10px;justify-content:center;">
-          <a href="/help/faq/" class="btn btn-outline btn-sm">よくある質問を見る</a>
-          <a href="/help/ai/" class="btn btn-primary btn-sm">AIに質問する</a>
-        </div> -->
 
       </div>
     </main>

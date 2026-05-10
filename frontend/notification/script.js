@@ -22,19 +22,24 @@ $(function () {
   function fetchNotifications() {
     api({
       method: 'GET',
-      path: '/dashboard/init'
+      path: '/notifications'
     })
       .done(function (data) {
         // API レスポンスを画面表示用の形式に変換して保持する
+        var SERVICE_META = {
+          'subscr_optimizer': { label: 'サブスク管理人', cls: 'badge-service-sm', filterKey: 'subsuku' },
+          'lunchmap':         { label: 'ランチマップ',   cls: 'badge-service-lm', filterKey: 'lunchmap' },
+        };
         notifications = (data.notifications || []).map(function(n) {
+          var svc = SERVICE_META[n.service_id] || { label: 'ネザーID', cls: 'badge-service-id', filterKey: 'all' };
           return {
             id:            n.id,
-            date:          n.published_at ? n.published_at.split(' ')[0] : '',
-            service:       'ネザーID',
-            serviceClass:  'badge-service-id',
+            date:          n.published_at ? n.published_at.split('T')[0] : '',
+            service:       svc.label,
+            serviceClass:  svc.cls,
             category:      'お知らせ',
             categoryClass: 'badge-cat-info',
-            filterKey:     'all',
+            filterKey:     svc.filterKey,
             title:         n.title,
             body:          n.content  // モーダルの本文に使用する（HTML を許容する）
           };

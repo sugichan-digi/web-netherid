@@ -11,6 +11,7 @@
       var n = new Date();
       var v = n.getFullYear() + ("00"+(n.getMonth()+1)).slice(-2) + ("00"+n.getDate()).slice(-2) + ("00"+n.getHours()).slice(-2) + ("00"+n.getMinutes()).slice(-2) + ("00"+n.getSeconds()).slice(-2);
       document.write('<link rel="stylesheet" href="/design-system/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/common.css?v=' + v + '">');
       document.write('<link rel="stylesheet" href="/notification/style.css?v=' + v + '">');
       document.write('<script src="/common.js?v=' + v + '"><\/script>');
       document.write('<script src="/notification/script.js?v=' + v + '"><\/script>');
@@ -46,13 +47,9 @@
 
       <!-- Category Filter Tabs -->
       <div class="notification-filters" id="notif-filters">
-        <button class="filter-tab active" data-filter="all">全件</button>
-        <button class="filter-tab" data-filter="nether-id">ネザーID</button>
-        <button class="filter-tab" data-filter="nether-ma">ネザーM&amp;A</button>
-        <button class="filter-tab" data-filter="nether-keyword">ネザーキーワード</button>
-        <button class="filter-tab" data-filter="nether-server">ネザーサーバー</button>
-        <button class="filter-tab" data-filter="nether-domain">ネザードメイン</button>
-        <button class="filter-tab" data-filter="nether-dmarket">ネザードメインマーケット</button>
+        <button class="filter-tab active" data-filter="all">全て</button>
+        <button class="filter-tab" data-filter="subsuku">サブスク管理人</button>
+        <button class="filter-tab" data-filter="lunchmap">ランチマップ</button>
       </div>
 
       <!-- Notification List -->
@@ -69,18 +66,6 @@
         <p>該当するお知らせがありません</p>
       </div>
 
-      <!-- Support Section -->
-      <div class="notif-support">
-        <p class="notif-support-text">わからないことは<strong>「マニュアル・よくある質問」</strong>ですぐ解決するかも</p>
-        <a href="#" class="btn btn-outline btn-sm">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-          よくある質問を見る
-        </a>
-      </div>
 
     </div>
   </main>
@@ -135,9 +120,7 @@
         <div class="lp-footer-col">
           <p class="lp-footer-col-title">サポート</p>
           <div class="lp-footer-links">
-            <a href="#">よくある質問</a>
-            <a href="#">お問い合わせ</a>
-            <a href="#">マニュアル</a>
+            <a href="/contact/">お問い合わせ</a>
           </div>
         </div>
 
@@ -147,27 +130,17 @@
           <div class="lp-footer-links">
             <a href="/auth/register/">新規登録</a>
             <a href="/auth/login/">ログイン</a>
-            <a href="/auth/password-reset/">パスワード再設定</a>
+            <a href="/auth/recovery/">パスワード再設定</a>
           </div>
         </div>
 
-        <!-- Col 4: 運営会社 -->
-        <div class="lp-footer-col">
-          <p class="lp-footer-col-title">運営会社</p>
-          <div class="lp-footer-links">
-            <a href="#">運営会社情報</a>
-            <a href="#">特定商取引法に基づく表記</a>
-          </div>
-        </div>
 
         <!-- Col 5: サービス -->
         <div class="lp-footer-col">
           <p class="lp-footer-col-title">サービス</p>
           <div class="lp-footer-links">
-            <a href="#">ネザーM&amp;A</a>
-            <a href="#">ネザーキーワード</a>
-            <a href="#">ネザーサーバー</a>
-            <a href="#">ネザードメイン</a>
+            <a href="#">サブスク管理人</a>
+            <a href="#">ランチマップ</a>
           </div>
         </div>
 

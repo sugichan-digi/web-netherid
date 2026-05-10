@@ -23,7 +23,7 @@ class NotificationModel
         return DB::table(self::TABLE)
             ->where('published_at', '<=', now())
             ->orderByDesc('published_at')
-            ->select(['id', 'title', 'content', 'url', 'published_at'])
+            ->select(['id', 'title', 'content', 'service_id', 'url', 'published_at'])
             ->get();
     }
 }

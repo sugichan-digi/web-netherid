@@ -15,6 +15,7 @@
         ("00" + n.getMinutes()).slice(-2) +
         ("00" + n.getSeconds()).slice(-2);
       document.write('<link rel="stylesheet" href="/design-system/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/common.css?v=' + v + '">');
       document.write('<link rel="stylesheet" href="/auth/recovery/style.css?v=' + v + '">');
       document.write('<script src="/common.js?v=' + v + '"><\/script>');
       document.write('<script src="/auth/recovery/script.js?v=' + v + '"><\/script>');
@@ -48,11 +49,11 @@
         </div>
 
         <h1 class="auth-card-title">パスワードの再設定</h1>
-        <p class="auth-card-sub">登録済みのメールアドレスにリカバリコードを送信します</p>
+        <p class="auth-card-sub">登録済みのメールアドレスに認証コードを送信します</p>
 
         <div class="alert alert-info" style="margin-bottom:var(--space-5);">
           <div class="alert-content">
-            登録済みのメールアドレスを入力してください。リカバリコードをメールにてお送りします。
+            登録済みのメールアドレスを入力してください。認証コードをメールにてお送りします。
           </div>
         </div>
 
@@ -77,7 +78,7 @@
           </div>
 
           <button type="submit" class="btn btn-primary btn-full btn-lg" id="js-submit">
-            リカバリコードを送信
+            認証コードを送信
           </button>
         </form>
 

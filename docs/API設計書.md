@@ -13,6 +13,8 @@
 * **セッション管理**: Ory Kratosで発行されたCookie（例: `ory_kratos_session`）を利用します。
 * **バックエンド側での認証**: Laravelのミドルウェア層で、リクエストに付与されたCookieを用いてKratosの `GET /sessions/whoami` に検証リクエストを送り、有効なセッションか判定します。
 * **ユーザーの自動同期**: Kratosでの検証が成功した際、Laravelの `users` テーブルに該当の `kratos_identity_id` が存在しない場合は、ミドルウェア内で自動的にレコード（ユーザー）を作成（JITプロビジョニング）します。
+* **認証任意エンドポイント** (`kratos.optional`): セッションがあればユーザー情報を付与するが、未ログインでも正常にレスポンスを返します。
+* **認証必須エンドポイント** (`kratos.auth`): 有効なセッションCookieがない場合は `401` を返します。
 
 ### 1.3. エラーレスポンス共通フォーマット
 ```json
@@ -31,22 +33,19 @@
 
 ---
 
-## 2. APIエンドポイント定義（フェーズ1）
+## 2. APIエンドポイント定義
 
-### 2.1. ダッシュボード初期情報取得
-マイページ（ダッシュボード）表示に必要な「お知らせ」と「サービス連携状況」を一括取得します。
+### 2.1. お知らせ一覧取得
 
-* **エンドポイント**: `GET /dashboard/init`
-* **認証要件**: 必須（Kratos Session Cookie）
+公開済みのお知らせ情報を一覧で取得します。
+
+* **エンドポイント**: `GET /notifications`
+* **認証要件**: 任意（未ログインでも取得可）
 * **リクエストパラメータ**: なし
 
 * **レスポンス (200 OK)**:
 ```json
 {
-  "user": {
-    "id": 1,
-    "kratos_identity_id": "123e4567-e89b-12d3-a456-426614174000"
-  },
   "notifications": [
     {
       "id": 1,
@@ -55,7 +54,31 @@
       "url": null,
       "published_at": "2026-05-08T12:00:00Z"
     }
-  ],
+  ]
+}
+```
+
+| フィールド | 型 | 説明 |
+|---|---|---|
+| `id` | integer | お知らせID |
+| `title` | string | タイトル |
+| `content` | string | 本文 |
+| `url` | string\|null | 関連URL（任意） |
+| `published_at` | string (ISO 8601) | 公開日時 |
+
+---
+
+### 2.2. サービス一覧取得
+
+提供中のサービス一覧を取得します。ログイン済みの場合、各サービスへの連携状況（`is_linked` / `linked_at`）が付与されます。
+
+* **エンドポイント**: `GET /services`
+* **認証要件**: 任意（未ログインでも取得可。連携状態は `is_linked: false` / `linked_at: null` として返る）
+* **リクエストパラメータ**: なし
+
+* **レスポンス (200 OK)**:
+```json
+{
   "services": [
     {
       "id": "subscr_optimizer",
@@ -80,19 +103,30 @@
   ]
 }
 ```
-**※仕様メモ**: `services` 配列内の `is_linked` と `linked_at` は、アクセスしたユーザーの `user_linked_services` テーブルのレコード有無によってバックエンド側で動的に判定・結合して返却します。
+
+| フィールド | 型 | 説明 |
+|---|---|---|
+| `id` | string | サービス識別子 |
+| `name` | string | サービス名 |
+| `description` | string | サービス説明 |
+| `sso_url` | string (URI) | SSO認証エントリポイント |
+| `icon_url` | string | アイコン画像パス |
+| `is_active` | boolean | サービス公開状態 |
+| `is_linked` | boolean | 当該ユーザーの連携有無（未ログイン時は常に `false`） |
+| `linked_at` | string\|null (ISO 8601) | 連携日時（未連携または未ログイン時は `null`） |
+
+**※仕様メモ**: `is_linked` と `linked_at` は、アクセスしたユーザーの `user_linked_services` テーブルのレコード有無をバックエンド側で動的に判定・結合して返却します。
 
 ---
 
+### 2.3. お問い合わせAPI
 
+#### 2.3.1. お問い合わせ送信
 
----
-
-### 2.2. お問い合わせAPI
-ダッシュボード（マイページ）やパブリックページからの問い合わせ内容を送信します。未ログインの場合は `user_id` なしとして登録されます。
+お問い合わせ内容を送信します。
 
 * **エンドポイント**: `POST /inquiries`
-* **認証要件**: 任意（セッションがあれば `user_id` を自動付与）
+* **認証要件**: 必須（Kratos Session Cookie）
 * **リクエスト**:
 ```json
 {
@@ -103,6 +137,13 @@
 }
 ```
 
+| フィールド | 型 | 必須 | 説明 |
+|---|---|---|---|
+| `email` | string (email) | Yes | 連絡先メールアドレス |
+| `type` | string | Yes | 種別（例: `account`, `payment`, `other`）最大50文字 |
+| `subject` | string | Yes | 件名（最大255文字） |
+| `body` | string | Yes | 本文 |
+
 * **レスポンス (201 Created)**:
 ```json
 {
@@ -111,10 +152,75 @@
 }
 ```
 
-* **エラーレスポンス (422 Unprocessable Entity)**: 必須項目不足（例: `email` や `body` の不足）。
+* **エラーレスポンス (422 Unprocessable Entity)**: 必須項目不足（`email` / `type` / `subject` / `body`）。
+* **エラーレスポンス (401 Unauthorized)**: 未ログインの場合。
 
+---
 
-## 3. 将来拡張API（フェーズ2以降・現段階ではモックのみ・または未実装）
+#### 2.3.2. お問い合わせ履歴取得
+
+ログインユーザー自身のお問い合わせ履歴を取得します。
+
+* **エンドポイント**: `GET /inquiries`
+* **認証要件**: 必須（Kratos Session Cookie）
+* **リクエストパラメータ**: なし
+
+* **レスポンス (200 OK)**:
+```json
+{
+  "inquiries": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "email": "user@example.com",
+      "type": "account",
+      "subject": "パスワードを忘れました",
+      "body": "リカバリコードも紛失してしまったため、リセットをお願いします。",
+      "status": "open",
+      "created_at": "2026-05-08T12:00:00Z",
+      "updated_at": "2026-05-08T12:00:00Z"
+    }
+  ]
+}
+```
+
+| フィールド | 型 | 説明 |
+|---|---|---|
+| `id` | integer | お問い合わせID |
+| `user_id` | integer | ユーザーID |
+| `email` | string | 連絡先メールアドレス |
+| `type` | string | 種別 |
+| `subject` | string | 件名 |
+| `body` | string | 本文 |
+| `status` | string | ステータス（`open` / `closed`） |
+| `created_at` | string (ISO 8601) | 作成日時 |
+| `updated_at` | string (ISO 8601) | 更新日時 |
+
+* **エラーレスポンス (401 Unauthorized)**: 未ログインの場合。
+
+---
+
+### 2.4. アカウント退会
+
+ログインユーザーのアカウントを無効化します。Kratosのidentityの `state` を `inactive` に設定し、`metadata_admin.deactivated_at` に退会日時を記録します。
+
+* **エンドポイント**: `DELETE /account/deactivate`
+* **認証要件**: 必須（Kratos Session Cookie）
+* **リクエストパラメータ**: なし
+
+* **レスポンス (200 OK)**:
+```json
+{
+  "message": "退会処理が完了しました。"
+}
+```
+
+* **エラーレスポンス (401 Unauthorized)**: 未ログインの場合。
+* **エラーレスポンス (500 Internal Server Error)**: Kratos Identityの取得・更新に失敗した場合。
+
+---
+
+## 3. 将来拡張API（フェーズ2以降・未実装）
 
 フェーズ1では画面上でグレーアウト（準備中）となっている機能のAPIです。
 

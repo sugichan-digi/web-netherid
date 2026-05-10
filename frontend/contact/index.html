@@ -16,7 +16,7 @@
         ("00" + n.getMinutes()).slice(-2) +
         ("00" + n.getSeconds()).slice(-2);
       document.write('<link rel="stylesheet" href="/design-system/style.css?v=' + v + '">');
-      document.write('<link rel="stylesheet" href="/mypage/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/common.css?v=' + v + '">');
       document.write('<link rel="stylesheet" href="/contact/style.css?v=' + v + '">');
       document.write('<script src="/common.js?v=' + v + '"><\/script>');
       document.write('<script src="/contact/script.js?v=' + v + '"><\/script>');
@@ -169,15 +169,8 @@
                 <select id="contact-service" name="service" class="form-input form-select">
                   <option value="">選択してください</option>
                   <option value="nether-id">ネザーID</option>
-                  <option value="nether-ma">ネザーM&A</option>
-                  <option value="nether-site-market">ネザーサイトマーケット</option>
-                  <option value="nether-keyword">ネザーキーワード</option>
-                  <option value="nether-server">ネザーサーバー</option>
-                  <option value="nether-domain">ネザードメイン</option>
-                  <option value="nether-domain-market">ネザードメインマーケット</option>
-                  <option value="cd-domain">中古ドメイン販売屋さん</option>
-                  <option value="nether-affiliate">ネザーIDアフィリエイト</option>
-                  <option value="nether-tools">ネザーツールズ</option>
+                  <option value="subsuku">サブスク管理人</option>
+                  <option value="lunchmap">ランチマップ</option>
                   <option value="other">その他</option>
                 </select>
                 <span class="form-error" id="js-service-error" style="display:none;"></span>

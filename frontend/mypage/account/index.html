@@ -16,7 +16,7 @@
         ("00" + n.getMinutes()).slice(-2) +
         ("00" + n.getSeconds()).slice(-2);
       document.write('<link rel="stylesheet" href="/design-system/style.css?v=' + v + '">');
-      document.write('<link rel="stylesheet" href="/mypage/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/common.css?v=' + v + '">');
       document.write('<link rel="stylesheet" href="/mypage/account/style.css?v=' + v + '">');
       document.write('<script src="/common.js?v=' + v + '"><\/script>');
       document.write('<script src="/mypage/account/script.js?v=' + v + '"><\/script>');
@@ -145,11 +145,7 @@
       <div class="mp-info-bubble">
         ネザーIDの退会手続きページです。<br>
         退会すると、すべてのネザーWEBサービスがご利用いただけなくなります。<br>
-        退会時に残存している「ネザーポイント」「売上金」は放棄されます。<br>
-        <br>
-        <strong id="js-point-summary" style="color:var(--primary);">
-          保有ネザーポイント： -- RP / 売上金（未出金）： -- 円
-        </strong>
+        登録情報・各サービスの連携設定はすべて削除されます。この操作は取り消せません。
       </div>
 
       <!-- 退会ボタン・ブロック理由 -->
