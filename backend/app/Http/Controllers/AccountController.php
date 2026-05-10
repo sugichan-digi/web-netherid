@@ -25,9 +25,6 @@ class AccountController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        // KratosのIdentity IDを取得（UserModelに保存されているはず）
-        // UserModelを確認する必要があるが、一旦KratosAuthで取得したIDを使用する
-        // ミドルウェアで identity_id も渡すように修正するのが確実
         $kratosIdentityId = $request->attributes->get('kratosIdentityId');
         
         if (!$kratosIdentityId) {

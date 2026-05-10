@@ -31,10 +31,6 @@ class KratosAuth
                 ->map(fn ($value, $name) => "{$name}={$value}")
                 ->implode('; ');
 
-            $cookieHeader = collect($request->cookies->all())
-                ->map(fn ($value, $name) => "{$name}={$value}")
-                ->implode('; ');
-
             // 受信したCookieのキー名だけをログに出力（値は伏せる）
             Log::channel('access')->info('Received Cookie Names:', [
                 'names' => array_keys($request->cookies->all()),

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ServiceController;
@@ -25,5 +26,5 @@ Route::middleware('kratos.auth')->group(function () {
     Route::post('/inquiries', [InquiryController::class, 'store']);
 
     // アカウント
-    Route::delete('/account/deactivate', [\App\Http\Controllers\AccountController::class, 'deactivate']);
+    Route::delete('/account/deactivate', [AccountController::class, 'deactivate']);
 });

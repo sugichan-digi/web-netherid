@@ -279,8 +279,7 @@ $(function () {
     $('#modal-category-badge').attr('class', 'badge ' + item.categoryClass).text(item.category);
     $('#modal-date').text(item.date);
     $('#notif-modal-title').text(item.title);
-    // body は HTML を含む場合があるため innerHTML として挿入する
-    $('#notif-modal-body').html(item.body);
+    $('#notif-modal-body').text(item.body);
     $overlay.addClass('is-open');
     $('body').addClass('modal-open');
   }

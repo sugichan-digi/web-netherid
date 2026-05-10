@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
+use App\Data\LinkedServiceDto;
 use App\Models\ServiceModel;
 use App\Models\UserLinkedServiceModel;
 
 /**
- * サービスサービス
+ * 連携サービスサービス
  */
-class ServiceService
+class LinkedServiceService
 {
     public function __construct(
         private readonly ServiceModel           $serviceModel,
@@ -28,15 +29,15 @@ class ServiceService
             ? $this->userLinkedServiceModel->findMapByUserId($userId)
             : [];
 
-        return $services->map(fn ($service) => [
-            'id'          => $service->id,
-            'name'        => $service->name,
-            'description' => $service->description,
-            'sso_url'     => $service->sso_url,
-            'icon_url'    => $service->icon_url,
-            'is_active'   => (bool) $service->is_active,
-            'is_linked'   => isset($linkMap[$service->id]),
-            'linked_at'   => $linkMap[$service->id] ?? null,
-        ])->values()->all();
+        return $services->map(fn ($service) => new LinkedServiceDto(
+            id:          $service->id,
+            name:        $service->name,
+            description: $service->description,
+            sso_url:     $service->sso_url,
+            icon_url:    $service->icon_url,
+            is_active:   (bool) $service->is_active,
+            is_linked:   isset($linkMap[$service->id]),
+            linked_at:   $linkMap[$service->id] ?? null,
+        ))->values()->all();
     }
 }

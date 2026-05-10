@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ServiceService;
+use App\Services\LinkedServiceService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 class ServiceController extends Controller
 {
     public function __construct(
-        private readonly ServiceService $serviceService,
+        private readonly LinkedServiceService $serviceService,
     ) {}
 
     /**

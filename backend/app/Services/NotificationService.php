@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Data\NotificationDto;
 use App\Models\NotificationModel;
 
 /**
@@ -16,19 +17,19 @@ class NotificationService
     /**
      * 公開済みお知らせ一覧取得
      *
-     * @return array
+     * @return NotificationDto[]
      */
     public function getPublished(): array
     {
         return $this->notificationModel->findPublished()
-            ->map(fn ($n) => [
-                'id'           => $n->id,
-                'title'        => $n->title,
-                'content'      => $n->content,
-                'service_id'   => $n->service_id,
-                'url'          => $n->url,
-                'published_at' => $n->published_at,
-            ])
+            ->map(fn ($n) => new NotificationDto(
+                id:           $n->id,
+                title:        $n->title,
+                content:      $n->content,
+                service_id:   $n->service_id,
+                url:          $n->url,
+                published_at: $n->published_at,
+            ))
             ->values()
             ->all();
     }
