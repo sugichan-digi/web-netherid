@@ -30,7 +30,7 @@ class LinkedServiceService
             : [];
 
         return $services->map(fn ($service) => new LinkedServiceDto(
-            id:          $service->id,
+            id:          (int) $service->id,
             name:        $service->name,
             description: $service->description,
             sso_url:     $service->sso_url,
