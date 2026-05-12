@@ -27,7 +27,10 @@ $(function () {
         var redirect = xhr.getResponseHeader('Location') || (res && res.redirect_browser_to);
         if (redirect) {
           window.location.href = redirect;
+          return;
         }
+
+        showError('登録フローの初期化に失敗しました（' + (xhr.status || 'ネットワークエラー') + '）。ページを再読み込みしてください。');
       });
   }
 
