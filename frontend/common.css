@@ -401,8 +401,8 @@
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-4);
-  background: var(--primary-dark);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--primary-light);
+  border-bottom: 1px solid rgba(5, 150, 105, 0.15);
 }
 
 .user-menu-dropdown-info {
@@ -415,13 +415,13 @@
 
 .user-menu-dropdown-uid {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--primary);
   font-weight: 500;
 }
 
 .user-menu-dropdown-email {
   font-size: 13px;
-  color: #fff;
+  color: var(--text);
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -436,7 +436,7 @@
 .user-menu-dropdown-rp-val {
   font-size: 20px;
   font-weight: 700;
-  color: #fff;
+  color: var(--primary);
   line-height: 1;
 }
 
