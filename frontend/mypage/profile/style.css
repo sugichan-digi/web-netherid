@@ -42,3 +42,31 @@
 .profile-pw-input-wrap .btn-icon:hover {
   color: var(--text);
 }
+
+/* パスワード強度バー */
+.pw-strength-wrap {
+  height: 4px;
+  background: var(--border);
+  border-radius: var(--radius-full);
+  margin-top: var(--space-2);
+  overflow: hidden;
+}
+
+.pw-strength-bar {
+  height: 100%;
+  width: 0;
+  border-radius: var(--radius-full);
+  transition: width var(--transition), background var(--transition);
+}
+
+.pw-strength-bar[data-level="1"] { width: 25%; background: var(--danger); }
+.pw-strength-bar[data-level="2"] { width: 50%; background: var(--warning); }
+.pw-strength-bar[data-level="3"] { width: 75%; background: var(--info); }
+.pw-strength-bar[data-level="4"] { width: 100%; background: var(--success); }
+
+.pw-strength-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: var(--space-1);
+  min-height: 18px;
+}

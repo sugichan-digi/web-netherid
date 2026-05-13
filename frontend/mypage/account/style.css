@@ -64,3 +64,65 @@
   background: var(--warning);
   border-radius: var(--radius-full);
 }
+
+/* 退会ボタンエリア */
+.mp-withdraw-center {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-5);
+  padding: var(--space-6) 0;
+}
+
+.mp-withdraw-btn {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+}
+
+.mp-withdraw-btn:hover {
+  background: var(--danger-hover);
+}
+
+/* 退会ブロック理由 */
+.mp-block-reasons {
+  background: var(--danger-light);
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  max-width: 560px;
+  width: 100%;
+}
+
+.mp-block-reasons-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--danger);
+  margin-bottom: var(--space-3);
+}
+
+.mp-block-reasons-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.mp-block-reasons-list li {
+  font-size: 13px;
+  color: var(--text-sub);
+  padding-left: var(--space-4);
+  position: relative;
+  line-height: 1.6;
+}
+
+.mp-block-reasons-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  background: var(--danger);
+  border-radius: var(--radius-full);
+}

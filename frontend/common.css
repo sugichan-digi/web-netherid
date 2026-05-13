@@ -1,0 +1,229 @@
+/* ===================================================
+   共通レイアウト — common.css
+   マイページ系全ページで使用するレイアウト・ナビゲーション・
+   タブなどの共通コンポーネント
+   =================================================== */
+
+/* ===== グリーンヘッダー ===== */
+
+.mp-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background: var(--primary);
+  z-index: var(--z-header);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.mp-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 var(--space-6);
+}
+
+.mp-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+}
+
+.mp-logo-mark {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mp-logo-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.mp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ===== ボディ：サイドバー + メイン の横並び ===== */
+
+.mp-body {
+  display: flex;
+  min-height: 100vh;
+  padding-top: var(--header-height);
+}
+
+/* ===== サイドバー ===== */
+
+.mp-sidebar {
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  position: fixed;
+  top: var(--header-height);
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  z-index: var(--z-sidebar);
+  padding: var(--space-4) 0;
+}
+
+.mp-nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 var(--space-3);
+}
+
+.mp-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-sub);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  text-decoration: none;
+  line-height: 1.4;
+  border-left: 3px solid transparent;
+}
+
+.mp-nav-item:hover {
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.mp-nav-item--active {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+  border-left-color: var(--primary);
+}
+
+.mp-nav-item--active:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.mp-nav-item--disabled {
+  color: var(--text-light);
+  cursor: default;
+}
+
+.mp-nav-item--disabled:hover {
+  background: transparent;
+  color: var(--text-light);
+}
+
+.mp-nav-item--danger {
+  color: var(--danger);
+}
+
+.mp-nav-item--danger:hover {
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+.mp-lock-badge {
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+  background: var(--surface-2);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  flex-shrink: 0;
+}
+
+/* ===== メインコンテンツ ===== */
+
+.mp-main {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: var(--space-8);
+  max-width: calc(var(--content-max-width) + var(--sidebar-width));
+  min-width: 0;
+}
+
+.mp-page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  border-left: 4px solid var(--primary);
+  padding-left: var(--space-4);
+  margin-bottom: var(--space-6);
+  line-height: 1.25;
+}
+
+/* ===== インフォバブル（タブ内の案内文） ===== */
+
+.mp-info-bubble {
+  background: var(--primary-light);
+  border: 1px solid rgba(5, 150, 105, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-sub);
+  margin-bottom: var(--space-5);
+}
+
+/* ===== タブバー ===== */
+
+.mp-tab-bar {
+  display: flex;
+  gap: var(--space-1);
+  border-bottom: 2px solid var(--border);
+  margin-bottom: var(--space-5);
+}
+
+.mp-tab {
+  padding: var(--space-3) var(--space-5);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.mp-tab:hover {
+  color: var(--text);
+}
+
+.mp-tab--active {
+  color: var(--primary);
+  font-weight: 600;
+  border-bottom-color: var(--primary);
+}
+
+.mp-tab-panel {
+  display: none;
+}
+
+.mp-tab-panel--active {
+  display: block;
+}
