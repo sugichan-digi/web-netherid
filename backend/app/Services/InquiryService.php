@@ -3,9 +3,11 @@
 namespace App\Services;
 
 use App\Data\CreateInquiryInput;
+use App\Mail\InquiryNotificationMail;
 use App\Models\InquiryModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * お問い合わせサービス
@@ -17,7 +19,7 @@ class InquiryService
     ) {}
 
     /**
-     * お問い合わせ作成
+     * お問い合わせ作成・管理者通知メール送信
      *
      * @param  CreateInquiryInput  $input  入力値オブジェクト
      * @return int 採番されたID
@@ -26,7 +28,7 @@ class InquiryService
     public function createInquiry(CreateInquiryInput $input): int
     {
         try {
-            return DB::transaction(function () use ($input) {
+            $inquiryId = DB::transaction(function () use ($input) {
                 return $this->inquiryModel->insert($input);
             });
         } catch (\Throwable $e) {
@@ -36,6 +38,22 @@ class InquiryService
             ]);
             throw $e;
         }
+
+        $adminAddress = config('mail.admin_address');
+        if ($adminAddress) {
+            try {
+                Mail::to($adminAddress)->send(new InquiryNotificationMail($input, $inquiryId));
+                Log::channel('access')->info('お問い合わせ通知メール送信', ['inquiry_id' => $inquiryId]);
+            } catch (\Throwable $e) {
+                Log::channel('error')->error('お問い合わせ通知メール送信失敗', [
+                    'inquiry_id' => $inquiryId,
+                    'message'    => $e->getMessage(),
+                    'trace'      => $e->getTraceAsString(),
+                ]);
+            }
+        }
+
+        return $inquiryId;
     }   
     /**
      * 指定ユーザーのお問い合わせ履歴取得
