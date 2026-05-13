@@ -65,7 +65,7 @@ $(function () {
       .fail(function (xhr) {
         // 401 はセッション切れ → getSession() 側でリダイレクト済みなので二重処理しない
         if (xhr.status === 401) {
-          window.location.href = '/auth/login/';
+          window.location.href = '/login/';
         }
       });
   }

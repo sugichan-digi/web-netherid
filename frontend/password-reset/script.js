@@ -17,7 +17,7 @@ $(function () {
   var settingsCsrfToken = '';
 
   /* ===== URLパラメータ処理 ===== */
-  // /auth/recovery/ から flow ID と email を引き継ぐ
+  // /recovery/ から flow ID と email を引き継ぐ
   var urlParams = new URLSearchParams(window.location.search);
   recoveryFlowId = urlParams.get('flow') || null;
   var userEmail = urlParams.get('email') || '';
@@ -239,7 +239,7 @@ $(function () {
     })
       .done(function () {
         // パスワード再設定完了 → ログイン画面へ遷移。?reset=1 で完了通知を表示させる
-        window.location.href = '/auth/login/?reset=1';
+        window.location.href = '/login/?reset=1';
       })
       .fail(function (xhr) {
         $btn.prop('disabled', false).text('パスワードを再設定する');

@@ -98,7 +98,7 @@ $(function () {
     })
       .done(function () {
         // 送信成功 → コード入力画面へ遷移。flow と email を URL パラメータで引き継ぐ
-        window.location.href = '/auth/recovery/reset/?flow=' + encodeURIComponent(flowId) + '&email=' + encodeURIComponent(email);
+        window.location.href = '/password-reset/?flow=' + encodeURIComponent(flowId) + '&email=' + encodeURIComponent(email);
       })
       .fail(function (xhr) {
         setLoading(false);
@@ -114,7 +114,7 @@ $(function () {
         // Kratos がメール送信済みを示す state を返す場合（成功扱い）
         // 存在しないメールアドレスへのリカバリ試行でも同様のレスポンスが返ることがある（情報開示防止）
         if (res && res.state === 'sent_email') {
-          window.location.href = '/auth/recovery/reset/?flow=' + encodeURIComponent(flowId) + '&email=' + encodeURIComponent(email);
+          window.location.href = '/password-reset/?flow=' + encodeURIComponent(flowId) + '&email=' + encodeURIComponent(email);
           return;
         }
 

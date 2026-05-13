@@ -16,9 +16,9 @@
         ("00" + n.getSeconds()).slice(-2);
       document.write('<link rel="stylesheet" href="/design-system/style.css?v=' + v + '">');
       document.write('<link rel="stylesheet" href="/common.css?v=' + v + '">');
-      document.write('<link rel="stylesheet" href="/auth/login/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/login/style.css?v=' + v + '">');
       document.write('<script src="/common.js?v=' + v + '"><\/script>');
-      document.write('<script src="/auth/login/script.js?v=' + v + '"><\/script>');
+      document.write('<script src="/login/script.js?v=' + v + '"><\/script>');
     })();
   </script>
 </head>
@@ -36,7 +36,7 @@
           <span class="logo-text">ネザー<span>ID</span></span>
         </a>
         <div class="header-actions">
-          <a href="/auth/register/" class="btn btn-white btn-sm">新規登録（無料）</a>
+          <a href="/register/" class="btn btn-white btn-sm">新規登録（無料）</a>
         </div>
       </div>
     </header>
@@ -48,7 +48,7 @@
         <p class="auth-card-sub">ご利用にはネザーIDのログインが必要です。</p>
 
         <!-- <p style="font-size:13px;color:var(--text-muted);margin-bottom:24px;">
-          <a href="/auth/register/" style="color:var(--primary);font-weight:600;text-decoration:none;">新規登録（メールアドレスのみ、30秒登録！）</a>
+          <a href="/register/" style="color:var(--primary);font-weight:600;text-decoration:none;">新規登録（メールアドレスのみ、30秒登録！）</a>
         </p> -->
 
         <div id="js-alert" class="alert" style="display:none;margin-bottom:20px;"></div>
@@ -99,7 +99,7 @@
             <span class="form-error" id="js-password-error" style="display:none;"></span>
           </div>
 
-          <a href="/auth/recovery/" class="login-recovery-link">ログイン情報をお忘れの場合はこちら</a>
+          <a href="/recovery/" class="login-recovery-link">ログイン情報をお忘れの場合はこちら</a>
 
           <button type="submit" class="btn btn-primary btn-full" id="js-submit" style="font-size:15px;padding:14px 20px;margin-top:24px;">
             ログインする

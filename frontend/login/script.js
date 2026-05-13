@@ -168,12 +168,12 @@ $(function () {
   /* ===== URLパラメータによる通知表示 ===== */
   var params = new URLSearchParams(window.location.search);
 
-  // メール認証完了後に /auth/verify/ から ?verified=1 で遷移してきた場合
+  // メール認証完了後に /verify/ から ?verified=1 で遷移してきた場合
   if (params.get('verified') === '1') {
     showSuccess('メールアドレスの認証が完了しました。ログインしてください。');
   }
 
-  // パスワード再設定完了後に /auth/recovery/reset/ から ?reset=1 で遷移してきた場合
+  // パスワード再設定完了後に /password-reset/ から ?reset=1 で遷移してきた場合
   if (params.get('reset') === '1') {
     showSuccess('パスワードの再設定が完了しました。新しいパスワードでログインしてください。');
   }

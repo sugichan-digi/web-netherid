@@ -180,9 +180,9 @@ $(function () {
         '</div>' +
         '<ul class="user-menu-dropdown-nav">' +
           '<li><a href="/mypage/" class="user-menu-dropdown-nav-item"><span>マイページ</span></a></li>' +
-          '<li><a href="/mypage/profile/" class="user-menu-dropdown-nav-item"><span>ユーザー情報</span></a></li>' +
+          '<li><a href="/profile/" class="user-menu-dropdown-nav-item"><span>ユーザー情報</span></a></li>' +
           '<li><a href="/contact/" class="user-menu-dropdown-nav-item"><span>お問い合わせ</span></a></li>' +
-          '<li><a href="/mypage/account/" class="user-menu-dropdown-nav-item user-menu-dropdown-nav-item--danger"><span>ネザーID退会</span></a></li>' +
+          '<li><a href="/account/" class="user-menu-dropdown-nav-item user-menu-dropdown-nav-item--danger"><span>ネザーID退会</span></a></li>' +
         '</ul>' +
         '<div class="user-menu-dropdown-footer">' +
           '<button id="js-nt-popup-logout" class="user-menu-logout-btn">ログアウト</button>' +

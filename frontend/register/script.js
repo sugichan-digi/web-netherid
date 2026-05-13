@@ -148,7 +148,7 @@ $(function () {
     })
       .done(function () {
         // 登録成功 → メール認証画面へ遷移。入力したメールアドレスを URL パラメータで引き継ぐ
-        window.location.href = '/auth/verify/?email=' + encodeURIComponent(email);
+        window.location.href = '/verify/?email=' + encodeURIComponent(email);
       })
       .fail(function (xhr) {
         setLoading(false);
