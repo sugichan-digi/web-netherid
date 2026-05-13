@@ -1,0 +1,116 @@
+/* ===================================================
+   利用規約 — style.css
+   =================================================== */
+
+.policy-wrap {
+  padding: var(--space-10) var(--space-6) var(--space-16);
+}
+
+.policy-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ページタイトル */
+.policy-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-4);
+  position: relative;
+}
+
+.policy-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--primary) 60px, var(--border) 60px);
+}
+
+.policy-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+/* セクション */
+.policy-section {
+  margin-bottom: var(--space-10);
+}
+
+.policy-section-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.policy-section p {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--text-sub);
+  margin-bottom: var(--space-3);
+}
+
+.policy-section p:last-child {
+  margin-bottom: 0;
+}
+
+.policy-section ol,
+.policy-section ul {
+  padding-left: var(--space-6);
+  margin-bottom: var(--space-3);
+}
+
+.policy-section li {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--text-sub);
+  margin-bottom: var(--space-2);
+}
+
+.policy-section li:last-child {
+  margin-bottom: 0;
+}
+
+/* インフォボックス */
+.policy-info-box {
+  background: var(--primary-light);
+  border: 1px solid rgba(5, 150, 105, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-sub);
+  margin-bottom: var(--space-8);
+}
+
+/* 条文インデント */
+.policy-clause {
+  counter-reset: clause;
+  padding-left: 0;
+  list-style: none;
+}
+
+.policy-clause li {
+  counter-increment: clause;
+  padding-left: 1.8em;
+  position: relative;
+}
+
+.policy-clause li::before {
+  content: counter(clause) '.';
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+  font-weight: 600;
+}

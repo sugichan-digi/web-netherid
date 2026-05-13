@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プライバシーポリシー — ネザーID</title>
+  <meta name="description" content="ネザーIDのプライバシーポリシーです。個人情報の取扱いについてご説明します。">
+  <script src="/jquery-4.0.0.min.js"></script>
+  <script>
+    (function () {
+      var n = new Date();
+      var v = n.getFullYear() +
+        ("00" + (n.getMonth() + 1)).slice(-2) +
+        ("00" + n.getDate()).slice(-2) +
+        ("00" + n.getHours()).slice(-2) +
+        ("00" + n.getMinutes()).slice(-2) +
+        ("00" + n.getSeconds()).slice(-2);
+      document.write('<link rel="stylesheet" href="/design-system/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/privacy/style.css?v=' + v + '">');
+      document.write('<script src="/common.js?v=' + v + '"><\/script>');
+      document.write('<script src="/script.js?v=' + v + '"><\/script>');
+    })();
+  </script>
+</head>
+
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header header--primary">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <div class="logo-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h4l8 12h4V20h-4L8 8H4V4z" />
+          </svg>
+        </div>
+        <span class="logo-text">ネザー<span>ID</span></span>
+      </a>
+      <div class="header-actions">
+        <a href="/login/" class="btn btn-ghost-white btn-sm header-login-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span class="header-btn-label">ログイン</span>
+        </a>
+        <a href="/register/" class="btn btn-white btn-sm">
+          <span class="header-register-full">新規登録（無料）</span>
+          <span class="header-register-short">新規登録</span>
+        </a>
+      </div>
+      <button class="header-hamburger" id="hamburger-btn" aria-label="メニューを開く" aria-expanded="false">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== MOBILE NAV ===== -->
+  <div id="mobile-nav-overlay" class="mobile-nav-overlay"></div>
+  <div id="mobile-nav" class="mobile-nav" aria-hidden="true">
+    <div class="mobile-nav-actions">
+      <a href="/login/" class="btn btn-primary btn-full">ログイン</a>
+      <a href="/register/" class="btn btn-outline btn-full">新規登録（無料）</a>
+    </div>
+  </div>
+
+  <!-- ===== CONTENT ===== -->
+  <div class="policy-wrap">
+    <div class="policy-inner">
+
+      <h1 class="policy-title">プライバシーポリシー</h1>
+      <p class="policy-meta">最終更新日：2026年1月1日</p>
+
+      <div class="policy-info-box">
+        ネザーWEBサービス（以下「当社」）は、ネザーIDおよびその関連サービス（以下「本サービス」）の提供にあたり、ユーザーの個人情報を適切に取り扱うことを重要な責務と考えております。本プライバシーポリシーでは、当社が取得する個人情報の種類・利用目的・管理方法についてご説明します。
+      </div>
+
+      <!-- 第1条 -->
+      <div class="policy-section">
+        <h2 class="policy-section-title">第1条（取得する情報）</h2>
+        <p>当社は、本サービスの提供にあたり、以下の情報を取得します。</p>
+        <ul>
+          <li><strong>登録情報</strong>：メールアドレス、パスワード（ハッシュ化）、ユーザー名等、ユーザーが登録時に入力した情報</li>
+          <li><strong>利用情報</strong>：ログイン日時、本サービスの利用履歴、操作ログ等</li>
+          <li><strong>お問い合わせ情報</strong>：ユーザーがお問い合わせフォームから送信した情報</li>
+          <li><strong>アクセス情報</strong>：IPアドレス、ブラウザ情報、デバイス情報、リファラー、閲覧ページ等（解析ツールにより自動取得）</li>
+          <li><strong>Cookie情報</strong>：セッション管理およびアクセス解析に使用するCookie情報</li>
+        </ul>
+      </div>
+
+      <!-- 第2条 -->
+      <div class="policy-section">
+        <h2 class="policy-section-title">第2条（利用目的）</h2>
+        <p>当社は、取得した情報を以下の目的で利用します。</p>
+        <ol class="policy-clause">
+          <li>本サービスのアカウント管理および認証のため</li>
+          <li>本サービスの提供・改善・開発のため</li>
+          <li>ユーザーへの通知・お問い合わせへの対応のため</li>
+          <li>不正アクセスや規約違反の検知・防止のため</li>
+          <li>本サービスの利用状況の分析・統計処理のため</li>
+          <li>法令上の義務の履行のため</li>
+        </ol>
+      </div>
+
+      <!-- 第3条 -->
+      <div class="policy-section">
+        <h2 class="policy-section-title">第3条（アクセス解析ツールの利用）</h2>
+        <p>当社は、本サービスの利用状況を把握・改善するため、以下のアクセス解析ツールを利用しています。これらのツールはCookieやその他の技術を使用して情報を収集します。収集された情報は各ツールのプライバシーポリシーに従って管理されます。</p>
+
+        <div class="policy-tool-card">
+          <p class="policy-tool-name">Google Analytics（Googleアナリティクス）</p>
+          <p class="policy-tool-desc">Google LLCが提供するアクセス解析サービスです。Cookieを使用して、ページビュー・セッション数・流入元・デバイス情報・ユーザーの行動パターン等を収集・分析します。収集されたデータはGoogleのサーバーに送信・保存されます。</p>
+          <p class="policy-tool-desc">Google アナリティクスのデータ収集はブラウザの「Google アナリティクス オプトアウト アドオン」を使用することで無効化できます。また、ブラウザのCookie設定を変更することでCookieの使用を拒否することができます（一部機能が利用できなくなる場合があります）。</p>
+          <div class="policy-tool-links">
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="policy-tool-link">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Googleプライバシーポリシー
+            </a>
+            <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer" class="policy-tool-link">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Googleアナリティクス オプトアウト アドオン
+            </a>
+          </div>
+        </div>
+
+        <div class="policy-tool-card">
+          <p class="policy-tool-name">Microsoft Clarity（マイクロソフト クラリティ）</p>
+          <p class="policy-tool-desc">Microsoft Corporationが提供するユーザー行動解析サービスです。ヒートマップ・セッションリプレイ・クリック解析等の機能を通じて、ユーザーの操作状況を記録・分析します。収集されたデータはMicrosoftのサーバーに送信・保存されます。</p>
+          <p class="policy-tool-desc">Clarityは個人を特定する情報（クレジットカード番号、パスワード等）を自動的にマスク処理します。ブラウザのCookie設定を変更することで、Clarityによるデータ収集を制限できます。</p>
+          <div class="policy-tool-links">
+            <a href="https://privacy.microsoft.com/ja-jp/privacystatement" target="_blank" rel="noopener noreferrer" class="policy-tool-link">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Microsoftプライバシーに関する声明
+            </a>
+            <a href="https://learn.microsoft.com/ja-jp/clarity/setup-and-installation/cookie-list" target="_blank" rel="noopener noreferrer" class="policy-tool-link">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              ClarityのCookie一覧
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第4条 -->
+      <div class="policy-section">
+        <h2 class="policy-section-title">第4条（Cookieの利用）</h2>
+        <ol class="policy-clause">
+          <li>当社は、本サービスのセッション管理・利便性向上・アクセス解析のためにCookieを使用します。</li>
+          <li>ユーザーは、ブラウザの設定によりCookieの受け入れを拒否できます。ただし、Cookieを無効にした場合、本サービスの一部機能が利用できなくなる場合があります。</li>
+          <li>当社が利用するCookieの種類：
+            <ul>
+              <li><strong>必須Cookie</strong>：ログインセッションの維持など、サービス提供に不可欠なCookie</li>
+              <li><strong>解析Cookie</strong>：Google AnalyticsおよびMicrosoft ClarityによるアクセスおよびUX分析用Cookie</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <!-- 第5条 -->
+      <div class="policy-section">
+        <h2 class="policy-section-title">第5条（第三者への提供）</h2>
+        <ol class="policy-clause">
+          <li>当社は、以下の場合を除き、ユーザーの個人情報を第三者に提供しません。
+            <ul>
+              <li>ユーザーの事前同意がある場合</li>
+              <li>法令に基づく場合</li>
+              <li>人の生命・身体・財産の保護のために必要であり、ユーザー本人の同意を得ることが困難な場合</li>
+              <li>公衆衛生の向上または児童の健全な育成の推進のために必要な場合</li>
+            </ul>
+          </li>
+          <li>当社は、本サービスの提供・改善のために業務委託先に個人情報を提供する場合があります。その場合、委託先との間で適切な秘密保持契約を締結します。</li>
+          <li>Google AnalyticsおよびMicrosoft Clarityへのデータ送信については、第3条に定める各サービスのプライバシーポリシーをご確認ください。</li>
+        </ol>
+      </div>
+
+      <!-- 第6条 -->
+      <div class="policy-section">
+        <h2 class="policy-section-title">第6条（個人情報の管理・保存期間）</h2>
+        <ol class="policy-clause">
+          <li>当社は、個人情報への不正アクセス・紛失・破損・漏洩等を防止するため、適切な安全管理措置を講じます。</li>
+          <li>アカウント情報は、退会の申請があった時点で削除します。ただし、法令上の保存義務がある情報については、必要な期間保存します。</li>
+          <li>アクセスログ等の利用情報は、統計処理後に一定期間保存し、その後削除します。</li>
+        </ol>
+      </div>
+
+      <!-- 第7条 -->
+      <div class="policy-section">
+        <h2 class="policy-section-title">第7条（個人情報の開示・訂正・削除）</h2>
+        <ol class="policy-clause">
+          <li>ユーザーは、当社が保有する自身の個人情報の開示・訂正・追加・削除・利用停止を請求できます。</li>
+          <li>前項の請求は、<a href="/contact/">お問い合わせページ</a>よりご連絡ください。本人確認のうえ、合理的な期間内に対応します。</li>
+          <li>アカウントの削除（退会）は、本サービスの所定の手続きよりご申請いただけます。</li>
+        </ol>
+      </div>
+
+      <!-- 第8条 -->
+      <div class="policy-section">
+        <h2 class="policy-section-title">第8条（未成年者の利用）</h2>
+        <p>18歳未満の方が本サービスをご利用になる場合は、保護者の同意を得たうえでご利用ください。当社は、未成年者の個人情報を取得した場合、保護者からの削除要求があり次第、速やかに対応します。</p>
+      </div>
+
+      <!-- 第9条 -->
+      <div class="policy-section">
+        <h2 class="policy-section-title">第9条（プライバシーポリシーの変更）</h2>
+        <ol class="policy-clause">
+          <li>当社は、法令の改正やサービス内容の変更等に伴い、本プライバシーポリシーを改訂することがあります。</li>
+          <li>重要な変更を行う場合は、本サービス上での通知、またはメール等によりユーザーへ事前にお知らせします。</li>
+          <li>変更後のプライバシーポリシーは、当社ウェブサイト上での掲示をもって効力を生じます。</li>
+        </ol>
+      </div>
+
+      <!-- お問い合わせ -->
+      <div class="policy-section">
+        <h2 class="policy-section-title">お問い合わせ</h2>
+        <p>本プライバシーポリシーに関するご質問・個人情報の開示等のご請求は、<a href="/contact/">お問い合わせページ</a>よりご連絡ください。</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="lp-footer">
+    <div class="lp-footer-inner">
+      <div class="lp-footer-grid">
+        <div class="lp-footer-col">
+          <a href="/" class="logo" style="margin-bottom:8px;">
+            <div class="logo-mark">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h4l8 12h4V20h-4L8 8H4V4z" />
+              </svg>
+            </div>
+            <span class="logo-text">ネザー<span>ID</span></span>
+          </a>
+          <p class="lp-footer-tagline">WEBサイト運営の共通ID</p>
+        </div>
+        <div class="lp-footer-col">
+          <p class="lp-footer-col-title">サポート</p>
+          <div class="lp-footer-links">
+            <a href="/contact/">お問い合わせ</a>
+          </div>
+        </div>
+        <div class="lp-footer-col">
+          <p class="lp-footer-col-title">アカウント</p>
+          <div class="lp-footer-links">
+            <a href="/register/">新規登録</a>
+            <a href="/login/">ログイン</a>
+            <a href="/recovery/">パスワード再設定</a>
+          </div>
+        </div>
+        <div class="lp-footer-col">
+          <p class="lp-footer-col-title">サービス</p>
+          <div class="lp-footer-links">
+            <a href="#">サブスク管理人</a>
+            <a href="#">ランチマップ</a>
+          </div>
+        </div>
+        <div class="lp-footer-col">
+          <p class="lp-footer-col-title">法的情報</p>
+          <div class="lp-footer-links">
+            <a href="/terms/">利用規約</a>
+            <a href="/privacy/">プライバシーポリシー</a>
+          </div>
+        </div>
+      </div>
+      <p class="lp-footer-copy">Copyright &copy; 2026 ネザーID All Rights Reserved.</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>
