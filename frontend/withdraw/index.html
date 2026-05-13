@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>退会フォーム — ネザーID</title>
+  <meta name="robots" content="noindex,nofollow">
+  <script src="/jquery-4.0.0.min.js"></script>
+  <script>
+    (function () {
+      var n = new Date();
+      var v = n.getFullYear() +
+        ("00" + (n.getMonth() + 1)).slice(-2) +
+        ("00" + n.getDate()).slice(-2) +
+        ("00" + n.getHours()).slice(-2) +
+        ("00" + n.getMinutes()).slice(-2) +
+        ("00" + n.getSeconds()).slice(-2);
+      document.write('<link rel="stylesheet" href="/design-system/style.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/common.css?v=' + v + '">');
+      document.write('<link rel="stylesheet" href="/withdraw/style.css?v=' + v + '">');
+      document.write('<script src="/common.js?v=' + v + '"><\/script>');
+      document.write('<script src="/withdraw/script.js?v=' + v + '"><\/script>');
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ===== グリーンヘッダー ===== -->
+  <header class="mp-header">
+    <div class="mp-header-inner">
+      <a href="/" class="mp-logo">
+        <div class="mp-logo-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h4l8 12h4V20h-4L8 8H4V4z"/>
+          </svg>
+        </div>
+        <span class="mp-logo-text">ネザーID</span>
+      </a>
+      <div class="mp-header-actions"></div>
+    </div>
+  </header>
+
+  <div class="mp-body">
+
+    <!-- ===== サイドバー ===== -->
+    <aside class="mp-sidebar">
+      <nav>
+        <ul class="mp-nav-list">
+
+          <li><a href="/mypage/" class="mp-nav-item">
+            <svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120zm0-80h560v-560h-80v120H280v-120h-80zm280-560q17 0 28.5-11.5T520-800t-11.5-28.5T480-840t-28.5 11.5T440-800t11.5 28.5T480-760"/>
+            </svg>
+            マイページ
+          </a></li>
+
+          <li><a href="/profile/" class="mp-nav-item">
+            <svg width="20" height="20" viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M480-480q-66 0-113-47t-47-113 47-113 113-47 113 47 47 113-47 113-113 47M160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440t130 15.5T736-378q29 15 46.5 43.5T800-272v112z"/>
+            </svg>
+            ユーザー情報
+          </a></li>
+
+          <li><a href="/contact/" class="mp-nav-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M10.597 16q0-2.024.362-2.912.363-.888 1.538-1.938 1.025-.9 1.562-1.562.538-.663.538-1.513 0-1.025-.688-1.7T11.997 5.7q-1.275 0-1.938.775-.662.776-.937 1.575l-2.575-1.1q.525-1.6 1.925-2.775T11.997 3q2.625 0 4.037 1.463 1.413 1.461 1.413 3.512 0 1.25-.538 2.138-.537.887-1.687 2.012-1.226 1.175-1.488 1.787-.262.614-.262 2.088zm1.4 6q-.825 0-1.413-.587A1.93 1.93 0 0 1 9.997 20q0-.824.587-1.413A1.93 1.93 0 0 1 11.997 18q.825 0 1.412.587.588.588.588 1.413 0 .824-.588 1.413a1.93 1.93 0 0 1-1.412.587"/>
+            </svg>
+            お問い合わせ
+          </a></li>
+
+          <li><a href="/account/" class="mp-nav-item mp-nav-item--active mp-nav-item--danger">
+            <svg width="20" height="20" viewBox="0 0 21 21" fill="currentColor">
+              <path d="m18.775 20.122-2.625-2.625H3v-2.8q0-.85.438-1.563.437-.712 1.162-1.087a13.7 13.7 0 0 1 2.288-.925 16.4 16.4 0 0 1 2.362-.525L.375 1.722 1.8.297l18.4 18.4zM17.4 12.047q.725.35 1.15 1.062t.45 1.538l-3.35-3.35q.45.175.888.35.437.175.862.4m-4.2-3.2-5.55-5.55A4.1 4.1 0 0 1 9.1 1.972a3.9 3.9 0 0 1 1.9-.475q1.65 0 2.825 1.175T15 5.497q0 1.025-.475 1.9a4.1 4.1 0 0 1-1.325 1.45"/>
+            </svg>
+            ネザーID退会
+          </a></li>
+
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- ===== メインコンテンツ ===== -->
+    <main class="mp-main">
+
+      <h2 class="mp-page-title">退会フォーム</h2>
+
+      <!-- インフォバブル -->
+      <div class="mp-info-bubble">
+        ネザーIDの退会をご希望の場合は、下記フォームよりお問い合わせください。<br>
+        内容を確認の上、担当者よりご連絡いたします。退会処理には数営業日かかる場合がございます。
+      </div>
+
+      <!-- 送信完了メッセージ（送信後に表示） -->
+      <div class="withdraw-success" id="js-withdraw-success" style="display:none;">
+        <div class="withdraw-success-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--success,#10b981)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <div class="withdraw-success-title">お問い合わせを受け付けました</div>
+        <p class="withdraw-success-body">
+          退会のご要望を承りました。内容を確認の上、担当者よりメールにてご連絡いたします。<br>
+          回答まで数営業日お時間をいただく場合がございます。
+        </p>
+        <a href="/mypage/" class="btn btn-outline" style="margin-top:var(--space-4);">マイページへ戻る</a>
+      </div>
+
+      <!-- 退会フォーム -->
+      <div class="card" id="js-withdraw-form-wrap">
+        <div class="card-header">
+          <h3 class="heading-md heading--panel">退会申請フォーム</h3>
+        </div>
+        <form id="js-withdraw-form" novalidate>
+          <div class="card-body">
+
+            <div class="form-group">
+              <label class="form-label" for="withdraw-reason">
+                退会理由
+                <span class="required">*</span>
+              </label>
+              <select id="withdraw-reason" name="reason" class="form-input form-select">
+                <option value="">選択してください</option>
+                <option value="no-use">サービスを使わなくなった</option>
+                <option value="switch-account">別のアカウントに切り替える</option>
+                <option value="dissatisfied">機能・サービスへの不満</option>
+                <option value="other">その他</option>
+              </select>
+              <span class="form-error" id="js-reason-error" style="display:none;"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="withdraw-detail">
+                詳細・ご意見（任意）
+              </label>
+              <textarea id="withdraw-detail" name="detail" class="form-input withdraw-textarea" placeholder="退会の詳細理由や改善点などがあればご記入ください"></textarea>
+            </div>
+
+            <div id="js-withdraw-form-error" class="alert alert-danger" style="display:none;"></div>
+
+          </div>
+          <div class="card-footer" style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);">
+            <a href="/account/" class="btn btn-outline">戻る</a>
+            <button type="submit" class="btn btn-danger" id="js-withdraw-submit-btn">送信する</button>
+          </div>
+        </form>
+      </div>
+
+    </main>
+  </div>
+
+</body>
+</html>
