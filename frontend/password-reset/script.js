@@ -43,6 +43,7 @@ $(function () {
       })
       .fail(function () {
         showError('認証情報の取得に失敗しました。最初からやり直してください。');
+        $('#js-code-form input, #js-code-submit').prop('disabled', true);
       });
   }
 
@@ -158,6 +159,12 @@ $(function () {
           return;
         }
 
+        // レートリミット
+        if (xhr.status === 429) {
+          showError('リクエストが多すぎます。しばらく時間をおいてから再度お試しください。');
+          return;
+        }
+
         showError(extractKratosErrorMessage(xhr, 'コードが正しくありません。もう一度お試しください。'));
       });
   });
@@ -249,6 +256,11 @@ $(function () {
         // Kratos が別ページへのリダイレクトを要求する場合
         if (res && res.redirect_browser_to) {
           window.location.href = res.redirect_browser_to;
+          return;
+        }
+
+        if (xhr.status === 429) {
+          showError('リクエストが多すぎます。しばらく時間をおいてから再度お試しください。');
           return;
         }
 
